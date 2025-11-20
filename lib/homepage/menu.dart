@@ -12,9 +12,17 @@ class MyHomePage extends StatelessWidget {
       // AppBar adalah bagian atas halaman yang menampilkan judul.
       appBar: AppBar(
         // Judul aplikasi dengan teks putih dan tebal.
-        title: const Text(
-          'NobarPedia',
-          style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+        title: RichText(
+          text: TextSpan(
+            style: const TextStyle(
+              fontSize: 20.0,
+              fontWeight: FontWeight.w600,
+            ),
+            children: <TextSpan>[
+              TextSpan(text: 'Nobar', style: TextStyle(color: Colors.white)),
+              TextSpan(text: 'Pedia', style: TextStyle(color: Colors.green)),
+            ],
+          ),
         ),
         // Warna latar belakang AppBar diambil dari skema warna tema aplikasi.
         backgroundColor: Theme.of(context).colorScheme.primary,
