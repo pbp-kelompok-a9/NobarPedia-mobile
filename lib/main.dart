@@ -35,8 +35,10 @@ class MyApp extends StatelessWidget {
           //
           // This works for code too, not just values: Most code changes can be
           // tested with just a hot reload.
+          scaffoldBackgroundColor: const Color.fromRGBO(30, 30, 30, 1.0),
           colorScheme: .fromSeed(
-            seedColor: const Color.fromARGB(255, 124, 252, 0),
+            seedColor: Colors.green,
+            brightness: Brightness.dark,
           ),
         ),
         home: const LoginPage(),
