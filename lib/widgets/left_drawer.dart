@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:nobarpedia_mobile/homepage/menu.dart';
+import 'package:nobarpedia_mobile/join/screens/menu.dart';
 // import 'package:nobarpedia_mobile/screens/productlist_form.dart';
 // import 'package:nobarpedia_mobile/screens/product_entry_list.dart';
 
@@ -56,7 +57,7 @@ class LeftDrawer extends StatelessWidget {
               Navigator.pushReplacement(
                 context,
                 // TODO: change route
-                MaterialPageRoute(builder: (context) => MyHomePage()),
+                MaterialPageRoute(builder: (context) => JoinPage()),
               );
             },
           ),
