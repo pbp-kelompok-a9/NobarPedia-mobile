@@ -10,6 +10,7 @@ class LeftDrawer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Drawer(
+      backgroundColor: Color.fromRGBO(30, 30, 30, 1),
       child: ListView(
         children: [
           const DrawerHeader(
@@ -40,7 +41,7 @@ class LeftDrawer extends StatelessWidget {
           ),
           ListTile(
             leading: const Icon(Icons.home_outlined),
-            title: const Text('Home'),
+            title: const Text('Home', style: TextStyle(color: Colors.grey)),
             // Redirect to Home page
             onTap: () {
               Navigator.pushReplacement(
@@ -51,7 +52,7 @@ class LeftDrawer extends StatelessWidget {
           ),
           ListTile(
             leading: const Icon(Icons.list_alt),
-            title: const Text('Join'),
+            title: const Text('Join', style: TextStyle(color: Colors.grey)),
             // Redirect to Join page
             onTap: () {
               Navigator.pushReplacement(
@@ -64,7 +65,8 @@ class LeftDrawer extends StatelessWidget {
           ListTile(
             leading: const Icon(Icons.login),
             // TODO: Change to logout button if already logged in
-            title: const Text('Login'),
+            title: const Text('Login',
+            style: TextStyle(color: Colors.grey)),
             onTap: () {
               // Redirect to Login Page
               Navigator.pushReplacement(

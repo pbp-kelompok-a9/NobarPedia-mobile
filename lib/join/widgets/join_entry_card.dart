@@ -1,94 +1,92 @@
 import 'package:flutter/material.dart';
-import 'package:nobarpedia_mobile/config.dart';
 import 'package:nobarpedia_mobile/join/models/JoinEntry.dart';
+
 
 class JoinEntryCard extends StatelessWidget {
   final JoinEntry join;
-  // final VoidCallback onTap;
 
   const JoinEntryCard({
     super.key,
     required this.join,
-    // required this.onTap,
   });
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 1),
-      child: InkWell(
-        // onTap: onTap,
-        child: Card(
-          color: Color.fromRGBO(64, 64, 64, 255),
-          child: Padding(
-            padding: const EdgeInsets.all(10.0),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.start,
+    return Card(
+      color: Colors.grey[800],
+      margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(8),
+      ),
+      child: Padding(
+        padding: const EdgeInsets.all(12.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                // // Thumbnail
-                // ClipRRect(
-                //   borderRadius: BorderRadius.circular(6),
-                //   child: Image.network(
-                //     '$baseUrl/proxy-image/?url=${Uri.encodeComponent(join.thumbnail)}',
-                //     height: 150,
-                //     width: double.infinity,
-                //     fit: BoxFit.cover,
-                //     errorBuilder: (context, error, stackTrace) => Container(
-                //       height: 150,
-                //       color: Colors.grey[300],
-                //       child: const Center(child: Icon(Icons.broken_image)),
-                //     ),
-                //   ),
-                // ),
-                // const SizedBox(height: 8),
-
-                // // Title
                 Text(
                   join.nobarPlaceName,
                   style: const TextStyle(
-                    fontSize: 14.0,
+                    fontSize: 16,
                     fontWeight: FontWeight.bold,
-                    color: Colors.white
+                    color: Colors.white,
                   ),
                 ),
                 Text(
-                  join.nobarPlaceCity,
+                  '🕐 ${join.nobarPlaceTime}',
                   style: const TextStyle(
-                    fontSize: 12.0,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.grey
+                    fontSize: 12,
+                    color: Colors.white,
                   ),
                 ),
-                const SizedBox(height: 4),
-
-                // // Category
-                // Text('Category: ${join.category}'),
-                // const SizedBox(height: 6),
-
-                // // Content preview
-                // Text(
-                //   join.description.length > 100
-                //       ? '${join.description.substring(0, 100)}...'
-                //       : join.description,
-                //   maxLines: 2,
-                //   overflow: TextOverflow.ellipsis,
-                //   style: const TextStyle(color: Colors.black54),
-                // ),
-                // const SizedBox(height: 6),
-
-                // // Featured indicator
-                // if (join.isFeatured)
-                //   const Text(
-                //     'Featured',
-                //     style: TextStyle(
-                //       color: Colors.amber,
-                //       fontWeight: FontWeight.bold,
-                //     ),
-                //   ),
               ],
             ),
-          ),
+            const SizedBox(height: 4),
+            Text(
+              join.nobarPlaceCity,
+              style: TextStyle(
+                fontSize: 12,
+                color: Colors.grey[400],
+              ),
+            ),
+            const SizedBox(height: 16),
+            Center(
+              child: Text(
+                'Status: ${join.status}',
+                style: const TextStyle(
+                  fontSize: 14,
+                  color: Colors.white,
+                ),
+              ),
+            ),
+            const SizedBox(height: 16),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                TextButton(
+                  onPressed: () {
+                    // TODO: Implement edit 
+                  },
+                  child: const Text(
+                    'Edit',
+                    style: TextStyle(color: Colors.green),
+                  ),
+                ),
+                const SizedBox(width: 8),
+                TextButton(
+                  onPressed: () {
+                    // TODO: Implement delete 
+                  },
+                  child: const Text(
+                    'Delete',
+                    style: TextStyle(color: Colors.red),
+                  ),
+                ),
+              ],
+            ),
+          ],
         ),
       ),
     );
