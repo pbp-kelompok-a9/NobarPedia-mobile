@@ -49,38 +49,79 @@ class _JoinPageState extends State<JoinPage> {
       drawer: const LeftDrawer(),
       backgroundColor: Color.fromRGBO(30, 30, 30, 1),
       // child: [] or body: [] theres image, filterbuttons, then the future builder
-      body: FutureBuilder(
-        future: fetchJoin(request),
-        builder: (context, AsyncSnapshot snapshot) {
-          if (snapshot.data == null) {
-            return const Center(child: CircularProgressIndicator());
-          } else {
-            if (!snapshot.hasData) {
-              return Column(
-                children: [
-                  Text(
-                    widget.mine
-                        ? 'You have not made any spots.'
-                        : 'You have not joined any spots yet.',
-                    style: const TextStyle(
-                      fontSize: 20,
-                      color: Color(0xff59A5D8),
+      body: Column(
+        children: [
+          // image
+          Image.asset(
+            'assets/images/joinhero.png',
+            fit: BoxFit.cover,
+            height: 150, // Adjust height as needed
+            width: double.infinity,
+          ),
+          const SizedBox(height: 16),
+          // filter buttons
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16.0),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                ElevatedButton(
+                  onPressed: () {
+                    // Implement filter logic
+                  },
+                  child: 
+                    Text('All Joined Spots',
+                      style: TextStyle( 
+                        color: widget.mine ? Colors.white : Colors.green
+                      )
                     ),
-                  ),
-                  const SizedBox(height: 8),
-                ],
-              );
-            } else {
-              return ListView.builder(
-                itemCount: snapshot.data!.length,
-                itemBuilder: (_, index) => JoinEntryCard(
-                  join: snapshot.data![index],
-                  // maybe an ontap redirect to the detail/review page?
                 ),
-              );
-            }
-          }
-        },
+                ElevatedButton(
+                  onPressed: () {
+                    // Implement filter logic
+                  },
+                  child: const Text('My Nobar Spot'),
+                ),
+              ],
+            ),
+          ),
+          const SizedBox(height: 16),
+          Expanded(
+            child: FutureBuilder(
+              future: fetchJoin(request),
+              builder: (context, AsyncSnapshot snapshot) {
+                if (snapshot.data == null) {
+                  return const Center(child: CircularProgressIndicator());
+                } else {
+                  if (!snapshot.hasData) {
+                    return Column(
+                      children: [
+                        Text(
+                          widget.mine
+                              ? 'You have not made any spots.'
+                              : 'You have not joined any spots yet.',
+                          style: const TextStyle(
+                            fontSize: 20,
+                            color: Color(0xff59A5D8),
+                          ),
+                        ),
+                        const SizedBox(height: 8),
+                      ],
+                    );
+                  } else {
+                    return ListView.builder(
+                      itemCount: snapshot.data!.length,
+                      itemBuilder: (_, index) => JoinEntryCard(
+                        join: snapshot.data![index],
+                        // maybe an ontap redirect to the detail/review page?
+                      ),
+                    );
+                  }
+                }
+              },
+            ),
+          ),
+        ],
       ),
     );
   }
