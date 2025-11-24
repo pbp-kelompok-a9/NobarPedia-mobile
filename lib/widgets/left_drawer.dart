@@ -1,8 +1,29 @@
 import 'package:flutter/material.dart';
 import 'package:nobarpedia_mobile/homepage/menu.dart';
+import 'package:nobarpedia_mobile/join/models/NobarSpot.dart';
 import 'package:nobarpedia_mobile/join/screens/menu.dart';
-// import 'package:nobarpedia_mobile/screens/productlist_form.dart';
-// import 'package:nobarpedia_mobile/screens/product_entry_list.dart';
+import 'package:nobarpedia_mobile/join/widgets/joinlist_form.dart';
+import 'dart:convert';
+import 'package:nobarpedia_mobile/config.dart';
+
+// dummy data
+final String jsonString = useProductionUrl
+    ? """                                                                                           
+{
+  "id": "cbab4863-b856-40ed-b734-21b2eed8dd27",
+  "name": "Pizza e Birra Sports Bar Cilandak Town Square",
+  "city": "Jakarta",
+  "time": "14:43",
+  "host_id": "2",
+  "host_username": "pbp",
+  "joined_count": 1
+}                                                                                                             
+"""
+    : """
+// insert, prev data was wrong endpoint
+""";
+
+final NobarSpot nobarSpot = NobarSpot.fromJson(json.decode(jsonString));
 
 class LeftDrawer extends StatelessWidget {
   const LeftDrawer({super.key});
@@ -10,7 +31,7 @@ class LeftDrawer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Drawer(
-      backgroundColor: Color.fromRGBO(30, 30, 30, 1),
+      backgroundColor: const Color.fromRGBO(30, 30, 30, 1),
       child: ListView(
         children: [
           const DrawerHeader(
@@ -40,9 +61,8 @@ class LeftDrawer extends StatelessWidget {
             ),
           ),
           ListTile(
-            leading: const Icon(Icons.home_outlined),
+            leading: const Icon(Icons.home_outlined, color: Colors.grey),
             title: const Text('Home', style: TextStyle(color: Colors.grey)),
-            // Redirect to Home page
             onTap: () {
               Navigator.pushReplacement(
                 context,
@@ -52,21 +72,48 @@ class LeftDrawer extends StatelessWidget {
           ),
           ListTile(
             leading: const Icon(Icons.list_alt),
-            title: const Text('Join', style: TextStyle(color: Colors.grey)),
-            // Redirect to Join page
+            title: const Text(
+              'Joined Spots',
+              style: TextStyle(color: Colors.grey),
+            ),
             onTap: () {
               Navigator.pushReplacement(
                 context,
-                // TODO: change route
                 MaterialPageRoute(builder: (context) => JoinPage()),
               );
             },
           ),
           ListTile(
-            leading: const Icon(Icons.login),
+            leading: const Icon(Icons.person_outline, color: Colors.grey),
+            title: const Text('My Spots', style: TextStyle(color: Colors.grey)),
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const JoinPage(mine: true),
+                ),
+              );
+            },
+          ),
+          ListTile(
+            leading: const Icon(Icons.add_box_outlined, color: Colors.grey),
+            title: const Text(
+              'Create Nobar Spot',
+              style: TextStyle(color: Colors.grey),
+            ),
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => CreateJoinPage(place: nobarSpot),
+                ),
+              );
+            },
+          ),
+          ListTile(
+            leading: const Icon(Icons.login, color: Colors.grey),
             // TODO: Change to logout button if already logged in
-            title: const Text('Login',
-            style: TextStyle(color: Colors.grey)),
+            title: const Text('Login', style: TextStyle(color: Colors.grey)),
             onTap: () {
               // Redirect to Login Page
               Navigator.pushReplacement(
