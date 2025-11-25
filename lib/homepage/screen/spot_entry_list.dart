@@ -14,7 +14,7 @@ class SpotEntryListPage extends StatefulWidget {
 }
 
 class _SpotEntryListPageState extends State<SpotEntryListPage> {
-  Future<List<SpotEntry>> fetchNews(CookieRequest request) async {
+  Future<List<SpotEntry>> fetchSpot(CookieRequest request) async {
     // TODO: Replace the URL with your app's URL and don't forget to add a trailing slash (/)!
     // To connect Android emulator with Django on localhost, use URL http://10.0.2.2/
     // If you using chrome,  use URL http://localhost:8000
@@ -43,7 +43,7 @@ class _SpotEntryListPageState extends State<SpotEntryListPage> {
       ),
       drawer: const LeftDrawer(),
       body: FutureBuilder(
-        future: fetchNews(request),
+        future: fetchSpot(request),
         builder: (context, AsyncSnapshot snapshot) {
           if (snapshot.data == null) {
             return const Center(child: CircularProgressIndicator());
@@ -69,7 +69,7 @@ class _SpotEntryListPageState extends State<SpotEntryListPage> {
                       ..hideCurrentSnackBar()
                       ..showSnackBar(
                         SnackBar(
-                          content: Text("You clicked on ${snapshot.data![index].title}"),
+                          content: Text("You clicked on ${snapshot.data![index].name}"),
                         ),
                       );
                   },
