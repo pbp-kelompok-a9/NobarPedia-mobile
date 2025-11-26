@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:nobarpedia_mobile/join/models/NobarSpot.dart';
+import 'package:nobarpedia_mobile/join/models/nobar_spot.dart';
 import 'package:nobarpedia_mobile/widgets/left_drawer.dart';
 import 'dart:convert';
 import 'package:provider/provider.dart';
@@ -69,7 +69,7 @@ class _CreateJoinPageState extends State<CreateJoinPage> {
                       borderRadius: BorderRadius.circular(5.0),
                     ),
                   ),
-                  value: _status,
+                  initialValue: _status,
                   items: _statuses
                       .map(
                         (status) => DropdownMenuItem(
@@ -92,7 +92,7 @@ class _CreateJoinPageState extends State<CreateJoinPage> {
                   padding: const EdgeInsets.all(8.0),
                   child: ElevatedButton(
                     style: ButtonStyle(
-                      backgroundColor: MaterialStateProperty.all(Colors.green),
+                      backgroundColor: WidgetStateProperty.all(Colors.green),
                     ),
                     onPressed: () async {
                       if (_formKey.currentState!.validate()) {

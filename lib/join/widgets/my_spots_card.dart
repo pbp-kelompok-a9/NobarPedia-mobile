@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-
-import 'package:nobarpedia_mobile/join/models/NobarSpot.dart';
+import 'package:nobarpedia_mobile/homepage/menu.dart';
+import 'package:nobarpedia_mobile/join/models/nobar_spot.dart';
 
 class MySpotsCard extends StatelessWidget {
   final NobarSpot spot;
@@ -43,7 +43,6 @@ class MySpotsCard extends StatelessWidget {
             const SizedBox(height: 16),
             Center(
               child: Text(
-                // COUNT AMOUNT OF JOINS
                 'Joined: ${spot.joinedCount}',
                 style: const TextStyle(fontSize: 14, color: Colors.white),
               ),
@@ -54,7 +53,13 @@ class MySpotsCard extends StatelessWidget {
               children: [
                 TextButton(
                   onPressed: () {
-                    // TODO: Implement edit
+                    // TODO: Redirect to homepage's edit form
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => MyHomePage(),
+                      ),
+                    );
                   },
                   child: const Text(
                     'Edit',
@@ -64,7 +69,7 @@ class MySpotsCard extends StatelessWidget {
                 const SizedBox(width: 8),
                 TextButton(
                   onPressed: () {
-                    // TODO: Implement delete
+                    // TODO: Call homepage's delete endpoint
                   },
                   child: const Text(
                     'Delete',

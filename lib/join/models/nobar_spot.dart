@@ -16,7 +16,7 @@ class NobarSpot {
   String city;
   String time;
   String hostId;
-  HostUsername hostUsername;
+  String hostUsername;
   int joinedCount;
 
   NobarSpot({
@@ -35,7 +35,7 @@ class NobarSpot {
     city: json["city"],
     time: json["time"],
     hostId: json["host_id"],
-    hostUsername: hostUsernameValues.map[json["host_username"]]!,
+    hostUsername: json["host_username"],
     joinedCount: json["joined_count"],
   );
 
@@ -45,23 +45,7 @@ class NobarSpot {
     "city": city,
     "time": time,
     "host_id": hostId,
-    "host_username": hostUsernameValues.reverse[hostUsername],
+    "host_username": hostUsername,
     "joined_count": joinedCount,
   };
-}
-
-enum HostUsername { PBP }
-
-final hostUsernameValues = EnumValues({"pbp": HostUsername.PBP});
-
-class EnumValues<T> {
-  Map<String, T> map;
-  late Map<T, String> reverseMap;
-
-  EnumValues(this.map);
-
-  Map<T, String> get reverse {
-    reverseMap = map.map((k, v) => MapEntry(v, k));
-    return reverseMap;
-  }
 }

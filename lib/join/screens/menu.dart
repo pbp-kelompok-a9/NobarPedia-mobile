@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:nobarpedia_mobile/join/models/JoinEntry.dart';
-import 'package:nobarpedia_mobile/join/models/NobarSpot.dart';
+import 'package:nobarpedia_mobile/join/models/join_entry.dart';
+import 'package:nobarpedia_mobile/join/models/nobar_spot.dart';
 import 'package:nobarpedia_mobile/join/widgets/join_entry_card.dart';
 import 'package:nobarpedia_mobile/join/widgets/my_spots_card.dart';
 import 'package:provider/provider.dart';
@@ -61,7 +61,7 @@ class _JoinPageState extends State<JoinPage> {
           Center(
             child: SizedBox(
               width: double.infinity,
-              height: 150, 
+              height: 150,
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(8.0),
                 child: Stack(
@@ -70,7 +70,7 @@ class _JoinPageState extends State<JoinPage> {
                     Image.asset(
                       'assets/images/joinhero.png',
                       fit: BoxFit.cover,
-                      color: Colors.black.withOpacity(0.5),
+                      color: Colors.black.withAlpha((255 * 0.5).round()),
                       colorBlendMode: BlendMode.darken,
                     ),
                     Align(
@@ -116,7 +116,6 @@ class _JoinPageState extends State<JoinPage> {
               ),
             ),
           ),
-          // Filter buttons
           Center(
             child: Container(
               width: double.infinity,
@@ -130,7 +129,6 @@ class _JoinPageState extends State<JoinPage> {
                   Expanded(
                     child: InkWell(
                       onTap: () {
-                        // TODO: Implement filter Joined Spot
                         if (widget.mine) {
                           Navigator.pushReplacement(
                             context,
@@ -142,7 +140,8 @@ class _JoinPageState extends State<JoinPage> {
                       },
                       child: Container(
                         padding: const EdgeInsets.all(8.0),
-                        child: const Text(
+                        color: widget.mine ? Colors.grey[850] : Colors.green,
+                        child: Text(
                           'Joined Spot',
                           textAlign: TextAlign.center,
                           style: TextStyle(color: Colors.white, fontSize: 12),
@@ -153,7 +152,6 @@ class _JoinPageState extends State<JoinPage> {
                   Expanded(
                     child: InkWell(
                       onTap: () {
-                        // TODO: Implement filter My Nobar Spot
                         if (!widget.mine) {
                           Navigator.pushReplacement(
                             context,
@@ -165,6 +163,7 @@ class _JoinPageState extends State<JoinPage> {
                       },
                       child: Container(
                         padding: const EdgeInsets.all(8.0),
+                        color: widget.mine ? Colors.green : Colors.grey[850],
                         child: const Text(
                           'My Nobar Spot',
                           textAlign: TextAlign.center,
@@ -182,39 +181,37 @@ class _JoinPageState extends State<JoinPage> {
             child: FutureBuilder(
               future: fetchJoin(request),
               builder: (context, AsyncSnapshot snapshot) {
-                if (snapshot.connectionState == ConnectionState.waiting) {
+                if (snapshot.data == null) {
                   return const Center(child: CircularProgressIndicator());
-                } else if (!snapshot.hasData || snapshot.data.isEmpty) {
-                  return Center(
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
+                } else {
+                  if (!snapshot.hasData) {
+                    return Column(
                       children: [
                         Text(
                           widget.mine
                               ? 'You have not made any spots.'
                               : 'You have not joined any spots yet.',
-                          style: TextStyle(
-                            fontSize: 20,
-                            color: Colors.white,
-                          ),
+                          style: TextStyle(fontSize: 20, color: Colors.white),
                         ),
                         const SizedBox(height: 8),
                       ],
-                    ),
-                  );
-                } else {
-                  return ListView.builder(
-                    itemCount: snapshot.data!.length,
-                    itemBuilder: (_, index) {
-                      if (widget.mine) {
-                        return MySpotsCard(
-                            spot: snapshot.data![index] as NobarSpot);
-                      } else {
-                        return JoinEntryCard(
-                            join: snapshot.data![index] as JoinEntry);
-                      }
-                    },
-                  );
+                    );
+                  } else {
+                    return ListView.builder(
+                      itemCount: snapshot.data!.length,
+                      itemBuilder: (_, index) {
+                        if (widget.mine) {
+                          return MySpotsCard(
+                            spot: snapshot.data![index] as NobarSpot,
+                          );
+                        } else {
+                          return JoinEntryCard(
+                            join: snapshot.data![index] as JoinEntry,
+                          );
+                        }
+                      },
+                    );
+                  }
                 }
               },
             ),

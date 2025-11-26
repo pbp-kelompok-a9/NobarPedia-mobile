@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:nobarpedia_mobile/homepage/menu.dart';
-import 'package:nobarpedia_mobile/join/models/NobarSpot.dart';
+import 'package:nobarpedia_mobile/join/models/nobar_spot.dart';
 import 'package:nobarpedia_mobile/join/screens/menu.dart';
 import 'package:nobarpedia_mobile/join/widgets/joinlist_form.dart';
 import 'dart:convert';
@@ -20,7 +20,15 @@ final String jsonString = useProductionUrl
 }                                                                                                             
 """
     : """
-// insert, prev data was wrong endpoint
+{
+  "id": "cdc29475-60cc-4fa5-9f30-440129072327",
+  "name": "boing",
+  "city": "depok",
+  "time": "17:18",
+  "host_id": "1",
+  "host_username": "pbp",
+  "joined_count": 0
+}
 """;
 
 final NobarSpot nobarSpot = NobarSpot.fromJson(json.decode(jsonString));
@@ -95,10 +103,11 @@ class LeftDrawer extends StatelessWidget {
               );
             },
           ),
+          // TODO: remove when review module has been integrated
           ListTile(
             leading: const Icon(Icons.add_box_outlined, color: Colors.grey),
             title: const Text(
-              'Create Nobar Spot',
+              'Join form (TEMP)',
               style: TextStyle(color: Colors.grey),
             ),
             onTap: () {

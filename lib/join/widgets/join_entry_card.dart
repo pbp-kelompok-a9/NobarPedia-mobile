@@ -78,6 +78,7 @@ class JoinEntryCard extends StatelessWidget {
                 TextButton(
                   onPressed: () {
                     // TODO: Implement delete 
+                    
                   },
                   child: const Text(
                     'Delete',
