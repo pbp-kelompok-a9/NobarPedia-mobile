@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:nobarpedia_mobile/join/models/JoinEntry.dart';
+import 'package:nobarpedia_mobile/join/models/join_entry.dart';
 
 
 class JoinEntryCard extends StatelessWidget {
