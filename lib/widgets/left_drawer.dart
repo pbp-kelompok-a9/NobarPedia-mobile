@@ -114,7 +114,7 @@ class LeftDrawer extends StatelessWidget {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => CreateJoinPage(place: nobarSpot),
+                  builder: (context) => CreateJoinPage(id: nobarSpot.id, name: nobarSpot.name, city: nobarSpot.city),
                 ),
               );
             },

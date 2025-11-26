@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:nobarpedia_mobile/join/models/nobar_spot.dart';
 import 'package:nobarpedia_mobile/widgets/left_drawer.dart';
 import 'dart:convert';
 import 'package:provider/provider.dart';
@@ -8,8 +7,13 @@ import 'package:nobarpedia_mobile/join/screens/menu.dart';
 import 'package:nobarpedia_mobile/config.dart';
 
 class CreateJoinPage extends StatefulWidget {
-  final NobarSpot place;
-  const CreateJoinPage({super.key, required this.place});
+  final String id;
+  final String name;
+  final String city;
+  final String? status;
+  const CreateJoinPage({super.key, required this.id, required this.name,
+    required this.city, this.status,
+  });
 
   @override
   State<CreateJoinPage> createState() => _CreateJoinPageState();
@@ -17,8 +21,14 @@ class CreateJoinPage extends StatefulWidget {
 
 class _CreateJoinPageState extends State<CreateJoinPage> {
   final _formKey = GlobalKey<FormState>();
-  String _status = "mungkin"; // Default status
+  String _status = "mungkin";
   final List<String> _statuses = ["mungkin", "pasti"];
+
+  @override
+  void initState() {
+    super.initState();
+    _status = widget.status ?? "mungkin";
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -43,17 +53,20 @@ class _CreateJoinPageState extends State<CreateJoinPage> {
                   children: [
                     Text(
                       "You are joining:",
-                      style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                      style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
                     const SizedBox(height: 8),
                     Text(
-                      widget.place.name,
-                      style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                      widget.name,
+                      style: TextStyle(
+                        fontSize: 24,
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
-                    Text(
-                      widget.place.city,
-                      style: TextStyle(fontSize: 16),
-                    ),
+                    Text(widget.city, style: TextStyle(fontSize: 16)),
                   ],
                 ),
               ),
@@ -74,7 +87,9 @@ class _CreateJoinPageState extends State<CreateJoinPage> {
                       .map(
                         (status) => DropdownMenuItem(
                           value: status,
-                          child: Text(status[0].toUpperCase() + status.substring(1)),
+                          child: Text(
+                            status[0].toUpperCase() + status.substring(1),
+                          ),
                         ),
                       )
                       .toList(),
@@ -99,7 +114,7 @@ class _CreateJoinPageState extends State<CreateJoinPage> {
                         final response = await request.postJson(
                           "$baseUrl/join/create-flutter/",
                           jsonEncode({
-                            "nobar_place_id": widget.place.id,
+                            "nobar_place_id": widget.id,
                             "status": _status,
                           }),
                         );
@@ -113,7 +128,8 @@ class _CreateJoinPageState extends State<CreateJoinPage> {
                             Navigator.pushAndRemoveUntil(
                               context,
                               MaterialPageRoute(
-                                builder: (context) => const JoinPage(mine: false),
+                                builder: (context) =>
+                                    const JoinPage(mine: false),
                               ),
                               (Route<dynamic> route) => false,
                             );

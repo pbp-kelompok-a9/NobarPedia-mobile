@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:nobarpedia_mobile/join/models/join_entry.dart';
+import 'package:nobarpedia_mobile/join/widgets/joinlist_form.dart';
 
 
 class JoinEntryCard extends StatelessWidget {
@@ -67,7 +68,17 @@ class JoinEntryCard extends StatelessWidget {
               children: [
                 TextButton(
                   onPressed: () {
-                    // TODO: Implement edit 
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => CreateJoinPage(
+                          id: join.nobarPlaceId,
+                          name: join.nobarPlaceName,
+                          city: join.nobarPlaceCity,
+                          status: join.status,
+                        ),
+                      ),
+                    );
                   },
                   child: const Text(
                     'Edit',
