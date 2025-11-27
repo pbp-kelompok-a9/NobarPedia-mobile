@@ -1,7 +1,37 @@
 import 'package:flutter/material.dart';
 import 'package:nobarpedia_mobile/homepage/menu.dart';
-// import 'package:nobarpedia_mobile/screens/productlist_form.dart';
-// import 'package:nobarpedia_mobile/screens/product_entry_list.dart';
+import 'package:nobarpedia_mobile/join/models/nobar_spot.dart';
+import 'package:nobarpedia_mobile/join/screens/menu.dart';
+import 'package:nobarpedia_mobile/join/widgets/joinlist_form.dart';
+import 'dart:convert';
+import 'package:nobarpedia_mobile/config.dart';
+
+// dummy data
+final String jsonString = useProductionUrl
+    ? """                                                                                           
+{
+  "id": "cbab4863-b856-40ed-b734-21b2eed8dd27",
+  "name": "Pizza e Birra Sports Bar Cilandak Town Square",
+  "city": "Jakarta",
+  "time": "14:43",
+  "host_id": "2",
+  "host_username": "pbp",
+  "joined_count": 1
+}                                                                                                             
+"""
+    : """
+{
+  "id": "cdc29475-60cc-4fa5-9f30-440129072327",
+  "name": "boing",
+  "city": "depok",
+  "time": "17:18",
+  "host_id": "1",
+  "host_username": "pbp",
+  "joined_count": 0
+}
+""";
+
+final NobarSpot nobarSpot = NobarSpot.fromJson(json.decode(jsonString));
 
 class LeftDrawer extends StatelessWidget {
   const LeftDrawer({super.key});
@@ -9,6 +39,7 @@ class LeftDrawer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Drawer(
+      backgroundColor: const Color.fromRGBO(30, 30, 30, 1),
       child: ListView(
         children: [
           const DrawerHeader(
@@ -38,9 +69,8 @@ class LeftDrawer extends StatelessWidget {
             ),
           ),
           ListTile(
-            leading: const Icon(Icons.home_outlined),
-            title: const Text('Home'),
-            // Redirect to Home page
+            leading: const Icon(Icons.home_outlined, color: Colors.grey),
+            title: const Text('Home', style: TextStyle(color: Colors.grey)),
             onTap: () {
               Navigator.pushReplacement(
                 context,
@@ -50,20 +80,49 @@ class LeftDrawer extends StatelessWidget {
           ),
           ListTile(
             leading: const Icon(Icons.list_alt),
-            title: const Text('Join'),
-            // Redirect to Join page
+            title: const Text(
+              'Joined Spots',
+              style: TextStyle(color: Colors.grey),
+            ),
             onTap: () {
               Navigator.pushReplacement(
                 context,
-                // TODO: change route
-                MaterialPageRoute(builder: (context) => MyHomePage()),
+                MaterialPageRoute(builder: (context) => JoinPage()),
               );
             },
           ),
           ListTile(
-            leading: const Icon(Icons.login),
+            leading: const Icon(Icons.person_outline, color: Colors.grey),
+            title: const Text('My Spots', style: TextStyle(color: Colors.grey)),
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const JoinPage(mine: true),
+                ),
+              );
+            },
+          ),
+          // TODO: remove when review module has been integrated
+          ListTile(
+            leading: const Icon(Icons.add_box_outlined, color: Colors.grey),
+            title: const Text(
+              'Join form (TEMP)',
+              style: TextStyle(color: Colors.grey),
+            ),
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => CreateJoinPage(id: nobarSpot.id, name: nobarSpot.name, city: nobarSpot.city),
+                ),
+              );
+            },
+          ),
+          ListTile(
+            leading: const Icon(Icons.login, color: Colors.grey),
             // TODO: Change to logout button if already logged in
-            title: const Text('Login'),
+            title: const Text('Login', style: TextStyle(color: Colors.grey)),
             onTap: () {
               // Redirect to Login Page
               Navigator.pushReplacement(
