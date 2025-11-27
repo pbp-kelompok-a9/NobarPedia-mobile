@@ -67,6 +67,7 @@ Modul ini menyediakan fitur **CRUD** untuk ulasan (*review*) terhadap tempat nob
 ---
 
 ## Alur pengintegrasian dengan web service
+
 1. Pengintegrasian aplikasi mobile dengan web service dilakukan dengan mengambil data berformat JSON dari URL web service yang digunakan untuk deploy Proyek Tengah Semester.
 2. Proses fetch dilakukan menggunakan Uri.parse pada file Dart, kemudian data diambil dengan metode GET yang memiliki tipe application/json.
 3. Setelah data berhasil diambil, data tersebut di-decode menggunakan jsonDecode(). Hasil decode kemudian diubah ke dalam bentuk model yang sudah dibuat, dan ditampilkan secara asinkron melalui widget FutureBuilder.
@@ -78,4 +79,9 @@ Dataset awal pada aplikasi ini bersumber dari **Google Maps API**.
 Dataset tersebut dapat dilihat [disini](https://pastebin.com/86erZaLJ).
 
 ## Design
+
 Design web dapat dilihat [disini](https://www.figma.com/design/Rrkw3y34LQvzZG2eX4y9qv/NobarPedia?node-id=1-4&t=pk6UbIUrCsmu7ZqR-1)
+
+## Spreadsheet Planning
+
+[Google Sheets](https://docs.google.com/spreadsheets/d/1DroMRWnR7XHWlZpcN-5UQMeX-QigGDYLUc1qxplRMDs/edit?usp=sharing)
