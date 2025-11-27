@@ -125,13 +125,12 @@ class _CreateJoinPageState extends State<CreateJoinPage> {
                                 content: Text("Successfully joined the spot!"),
                               ),
                             );
-                            Navigator.pushAndRemoveUntil(
+                            Navigator.pushReplacement(
                               context,
                               MaterialPageRoute(
                                 builder: (context) =>
                                     const JoinPage(mine: false),
                               ),
-                              (Route<dynamic> route) => false,
                             );
                           } else {
                             ScaffoldMessenger.of(context).showSnackBar(
