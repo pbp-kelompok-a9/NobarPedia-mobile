@@ -1,10 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:nobarpedia_mobile/account/screens/login.dart';
 import 'package:nobarpedia_mobile/homepage/menu.dart';
 import 'package:nobarpedia_mobile/join/models/nobar_spot.dart';
 import 'package:nobarpedia_mobile/join/screens/menu.dart';
 import 'package:nobarpedia_mobile/join/widgets/joinlist_form.dart';
 import 'dart:convert';
 import 'package:nobarpedia_mobile/config.dart';
+import 'package:pbp_django_auth/pbp_django_auth.dart';
+import 'package:provider/provider.dart';
+
 
 // dummy data
 final String jsonString = useProductionUrl
@@ -38,6 +42,7 @@ class LeftDrawer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final request = context.watch<CookieRequest>();
     return Drawer(
       backgroundColor: const Color.fromRGBO(30, 30, 30, 1),
       child: ListView(
@@ -128,8 +133,35 @@ class LeftDrawer extends StatelessWidget {
               Navigator.pushReplacement(
                 context,
                 // TODO: change route
-                MaterialPageRoute(builder: (context) => MyHomePage()),
+                MaterialPageRoute(builder: (context) => LoginPage()),
               );
+            },
+          ),
+           ListTile(
+            leading: const Icon(Icons.logout),
+            title: const Text('Logout'),
+            onTap: () async {
+              final response = await request.logout(
+                "$baseUrl/account/logout_flutter/",
+              );
+              String message = response["message"];
+              if (context.mounted) {
+                if (response['status']) {
+                  String uname = response["username"];
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(content: Text("$message See you again, $uname.")),
+                  );
+                  Navigator.pushAndRemoveUntil(
+                    context,
+                    MaterialPageRoute(builder: (context) => const LoginPage()),
+                    (route) => false,
+                  );
+                } else {
+                  ScaffoldMessenger.of(
+                    context,
+                  ).showSnackBar(SnackBar(content: Text(message)));
+                }
+              }
             },
           ),
         ],
