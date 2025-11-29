@@ -106,7 +106,7 @@ class _LoginPageState extends State<LoginPage> {
                       // To connect Android emulator with Django on localhost, use URL http://10.0.2.2/
                       // If you using chrome,  use URL http://localhost:8000
                       final response = await request.login(
-                        "$baseUrl/auth/login/",
+                        "$baseUrl/account/login_flutter/",
                         {'username': username, 'password': password},
                       );
 
