@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:nobarpedia_mobile/account/screens/login.dart';
+import 'package:nobarpedia_mobile/account/screens/register.dart';
 import 'package:nobarpedia_mobile/homepage/menu.dart';
 import 'package:nobarpedia_mobile/join/models/nobar_spot.dart';
 import 'package:nobarpedia_mobile/join/screens/menu.dart';
@@ -8,7 +9,6 @@ import 'dart:convert';
 import 'package:nobarpedia_mobile/config.dart';
 import 'package:pbp_django_auth/pbp_django_auth.dart';
 import 'package:provider/provider.dart';
-
 
 // dummy data
 final String jsonString = useProductionUrl
@@ -119,51 +119,89 @@ class LeftDrawer extends StatelessWidget {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => CreateJoinPage(id: nobarSpot.id, name: nobarSpot.name, city: nobarSpot.city),
+                  builder: (context) => CreateJoinPage(
+                    id: nobarSpot.id,
+                    name: nobarSpot.name,
+                    city: nobarSpot.city,
+                  ),
                 ),
               );
             },
           ),
-          ListTile(
-            leading: const Icon(Icons.login, color: Colors.grey),
-            // TODO: Change to logout button if already logged in
-            title: const Text('Login', style: TextStyle(color: Colors.grey)),
-            onTap: () {
-              // Redirect to Login Page
-              Navigator.pushReplacement(
-                context,
-                // TODO: change route
-                MaterialPageRoute(builder: (context) => LoginPage()),
-              );
-            },
-          ),
-           ListTile(
-            leading: const Icon(Icons.logout),
-            title: const Text('Logout'),
-            onTap: () async {
-              final response = await request.logout(
-                "$baseUrl/account/logout_flutter/",
-              );
-              String message = response["message"];
-              if (context.mounted) {
-                if (response['status']) {
-                  String uname = response["username"];
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(content: Text("$message See you again, $uname.")),
-                  );
-                  Navigator.pushAndRemoveUntil(
-                    context,
-                    MaterialPageRoute(builder: (context) => const LoginPage()),
-                    (route) => false,
-                  );
-                } else {
-                  ScaffoldMessenger.of(
-                    context,
-                  ).showSnackBar(SnackBar(content: Text(message)));
+          if (request.loggedIn) ...[
+            // Kalo user udah login, tampilkan button
+            // PROFIL USER dan LOGOUT
+            ListTile(
+              leading: const Icon(Icons.account_circle_rounded, color: Colors.grey),
+              title: const Text('Profile', style: TextStyle(color: Colors.grey)),
+              onTap: () {
+                // TODO: Redirect to Profile Page
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(builder: (context) => MyHomePage()),
+                );
+              },
+            ),
+            ListTile(
+              leading: const Icon(Icons.logout, color: Colors.grey),
+              title: const Text('Logout', style: TextStyle(color: Colors.grey)),
+              onTap: () async {
+                final response = await request.logout(
+                  "$baseUrl/account/logout_flutter/",
+                );
+                String message = response["message"];
+                if (context.mounted) {
+                  if (response['status']) {
+                    String uname = response["username"];
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        content: Text("$message See you again, $uname."),
+                      ),
+                    );
+                    Navigator.pushAndRemoveUntil(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const LoginPage(),
+                      ),
+                      (route) => false,
+                    );
+                  } else {
+                    ScaffoldMessenger.of(
+                      context,
+                    ).showSnackBar(SnackBar(content: Text(message)));
+                  }
                 }
-              }
-            },
-          ),
+              },
+            ),
+          ] else ...[
+            // Kalo user BELUM login, tampilkan button
+            // LOGIN dan REGISTER
+            ListTile(
+              leading: const Icon(Icons.login, color: Colors.grey),
+              title: const Text('Login', style: TextStyle(color: Colors.grey)),
+              onTap: () {
+                // Redirect to Login Page
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(builder: (context) => LoginPage()),
+                );
+              },
+            ),
+            ListTile(
+              leading: const Icon(Icons.create_outlined, color: Colors.grey),
+              title: const Text(
+                'Register',
+                style: TextStyle(color: Colors.grey),
+              ),
+              onTap: () {
+                // Redirect to Login Page
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(builder: (context) => RegisterPage()),
+                );
+              },
+            ),
+          ],
         ],
       ),
     );

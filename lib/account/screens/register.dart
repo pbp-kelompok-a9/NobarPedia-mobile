@@ -1,6 +1,8 @@
 import 'dart:convert';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:nobarpedia_mobile/account/screens/login.dart';
+import 'package:nobarpedia_mobile/homepage/menu.dart';
 import 'package:pbp_django_auth/pbp_django_auth.dart';
 import 'package:provider/provider.dart';
 import 'package:nobarpedia_mobile/config.dart';
@@ -22,12 +24,6 @@ class _RegisterPageState extends State<RegisterPage> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Register'),
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back),
-          onPressed: () {
-            Navigator.pop(context);
-          },
-        ),
       ),
       body: Center(
         child: SingleChildScrollView(
@@ -162,6 +158,63 @@ class _RegisterPageState extends State<RegisterPage> {
                       padding: const EdgeInsets.symmetric(vertical: 16.0),
                     ),
                     child: const Text('Register'),
+                  ),
+                  const SizedBox(height: 36.0),
+                  RichText(
+                    text: TextSpan(
+                      style: TextStyle(color: Colors.white, fontSize: 16.0),
+                      children: [
+                        const TextSpan(text: "Already have an account? "),
+                        TextSpan(
+                          text: "Sign In",
+                          style: TextStyle(
+                            color: Theme.of(context).colorScheme.primary,
+                            fontWeight: FontWeight.bold,
+                          ),
+                          recognizer: TapGestureRecognizer()
+                            ..onTap = () {
+                              Navigator.pushReplacement(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => const LoginPage(),
+                                ),
+                              );
+                            },
+                        ),
+                      ],
+                    ),
+                  ),
+                  const SizedBox(height: 10.0),
+                  RichText(
+                    text: TextSpan(
+                      style: TextStyle(color: Colors.white, fontSize: 16.0),
+                      children: [ const TextSpan(text: "Or") ],
+                    ),
+                  ),
+                  const SizedBox(height: 10.0),
+                  RichText(
+                    text: TextSpan(
+                      style: TextStyle(color: Colors.white, fontSize: 16.0),
+                      children: [
+                        const TextSpan(text: "Continue as "),
+                        TextSpan(
+                          text: "Guest",
+                          style: TextStyle(
+                            color: Theme.of(context).colorScheme.primary,
+                            fontWeight: FontWeight.bold,
+                          ),
+                          recognizer: TapGestureRecognizer()
+                            ..onTap = () {
+                              Navigator.pushReplacement(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => MyHomePage(),
+                                ),
+                              );
+                            },
+                        ),
+                      ],
+                    ),
                   ),
                 ],
               ),
