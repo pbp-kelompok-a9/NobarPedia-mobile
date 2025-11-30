@@ -1,26 +1,28 @@
 import 'package:flutter/material.dart';
-import 'package:nobarpedia_mobile/account/screens/change_password.dart';
-import 'package:nobarpedia_mobile/account/screens/profile.dart';
-import 'package:nobarpedia_mobile/config.dart';
 import 'package:nobarpedia_mobile/account/models/user_profile.dart';
 import 'package:pbp_django_auth/pbp_django_auth.dart';
 import 'package:provider/provider.dart';
+import 'package:nobarpedia_mobile/config.dart';
+import 'package:nobarpedia_mobile/account/screens/edit_profile_page.dart';
 
-class EditProfilePage extends StatefulWidget {
+class ChangePasswordPage extends StatefulWidget {
   final UserProfile profile;
   final int id;
 
-  const EditProfilePage({super.key, required this.profile, required this.id});
+  const ChangePasswordPage({
+    super.key,
+    required this.profile,
+    required this.id,
+  });
 
   @override
-  State<EditProfilePage> createState() => _EditProfilePageState();
+  State<ChangePasswordPage> createState() => _ChangePasswordPageState();
 }
 
-class _EditProfilePageState extends State<EditProfilePage> {
-  late TextEditingController usernameController;
-  late TextEditingController emailController;
-  late TextEditingController fullnameController;
-  late TextEditingController bioController;
+class _ChangePasswordPageState extends State<ChangePasswordPage> {
+  late TextEditingController oldPasswordController;
+  late TextEditingController newPassword1Controller;
+  late TextEditingController newPassword2Controller;
 
   bool isSubmitting = false;
   Map<String, dynamic>? errors;
@@ -28,18 +30,16 @@ class _EditProfilePageState extends State<EditProfilePage> {
   @override
   void initState() {
     super.initState();
-    usernameController = TextEditingController(text: widget.profile.username);
-    emailController = TextEditingController(text: widget.profile.email);
-    fullnameController = TextEditingController(text: widget.profile.fullname);
-    bioController = TextEditingController(text: widget.profile.bio);
+    oldPasswordController = TextEditingController();
+    newPassword1Controller = TextEditingController();
+    newPassword2Controller = TextEditingController();
   }
 
   @override
   void dispose() {
-    usernameController.dispose();
-    emailController.dispose();
-    fullnameController.dispose();
-    bioController.dispose();
+    oldPasswordController.dispose();
+    newPassword1Controller.dispose();
+    newPassword2Controller.dispose();
     super.dispose();
   }
 
@@ -52,22 +52,22 @@ class _EditProfilePageState extends State<EditProfilePage> {
     });
 
     final response = await request
-        .post("$baseUrl/account/api/edit_profile/${widget.id}/", {
-          "username": usernameController.text,
-          "email": emailController.text,
-          "fullname": fullnameController.text,
-          "bio": bioController.text,
+        .post("$baseUrl/account/api/change_password/${widget.id}/", {
+          "old_password": oldPasswordController.text,
+          "new_password1": newPassword1Controller.text,
+          "new_password2": newPassword2Controller.text,
         });
 
     if (response["status"] == true) {
       if (context.mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text("Profile updated successfully!")),
+          const SnackBar(content: Text("Password changed successfully!")),
         );
         Navigator.pushReplacement(
           context,
           MaterialPageRoute(
-            builder: (context) => ProfilePage(userId: widget.id),
+            builder: (context) =>
+                EditProfilePage(profile: widget.profile, id: widget.id),
           ),
         );
       }
@@ -83,6 +83,12 @@ class _EditProfilePageState extends State<EditProfilePage> {
     if (errors == null) return const SizedBox.shrink();
     return Container(
       margin: const EdgeInsets.only(bottom: 16),
+      padding: const EdgeInsets.all(12),
+      decoration: BoxDecoration(
+        color: Colors.red.withOpacity(0.1),
+        borderRadius: BorderRadius.circular(8),
+        border: Border.all(color: Colors.redAccent.withOpacity(0.3)),
+      ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: errors!.entries.map((entry) {
@@ -107,11 +113,13 @@ class _EditProfilePageState extends State<EditProfilePage> {
     );
   }
 
-  InputDecoration webInputStyle() {
+  InputDecoration webInputStyle(String hint) {
     return InputDecoration(
       filled: true,
       fillColor: const Color(0xFF333333),
       contentPadding: const EdgeInsets.symmetric(vertical: 12, horizontal: 14),
+      hintText: hint,
+      hintStyle: const TextStyle(color: Colors.white70),
       border: OutlineInputBorder(
         borderRadius: BorderRadius.circular(8),
         borderSide: const BorderSide(color: Color(0xFF666666)),
@@ -124,7 +132,6 @@ class _EditProfilePageState extends State<EditProfilePage> {
         borderRadius: BorderRadius.circular(8),
         borderSide: const BorderSide(color: Color(0xFF2CAC5C), width: 2),
       ),
-      hintStyle: const TextStyle(color: Colors.white70),
     );
   }
 
@@ -138,7 +145,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
       ),
       child: const Text(
-        "Update Profile",
+        "Update Password",
         style: TextStyle(fontWeight: FontWeight.w500),
       ),
     );
@@ -148,7 +155,10 @@ class _EditProfilePageState extends State<EditProfilePage> {
     return OutlinedButton(
       onPressed: () => Navigator.pushReplacement(
         context,
-        MaterialPageRoute(builder: (context) => ProfilePage(userId: widget.id)),
+        MaterialPageRoute(
+          builder: (context) =>
+              EditProfilePage(profile: widget.profile, id: widget.id),
+        ),
       ),
       style: OutlinedButton.styleFrom(
         side: const BorderSide(color: Color(0xFF666666)),
@@ -161,20 +171,6 @@ class _EditProfilePageState extends State<EditProfilePage> {
     );
   }
 
-  Widget secondaryButton(String text, Color border, Color color) {
-    return OutlinedButton(
-      onPressed: () {},
-      style: OutlinedButton.styleFrom(
-        side: BorderSide(color: border),
-        backgroundColor: const Color(0xFF333333),
-        foregroundColor: color,
-        padding: const EdgeInsets.symmetric(vertical: 12),
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
-      ),
-      child: Text(text),
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -182,7 +178,11 @@ class _EditProfilePageState extends State<EditProfilePage> {
       appBar: AppBar(
         backgroundColor: const Color(0xFF333333),
         elevation: 0,
-        title: const Text("Edit Profile"),
+        title: const Text("Change Password"),
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back),
+          onPressed: () => Navigator.pop(context),
+        ),
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.only(top: 40, bottom: 20),
@@ -197,70 +197,62 @@ class _EditProfilePageState extends State<EditProfilePage> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                // Avatar
-                Center(
-                  child: CircleAvatar(
-                    radius: 55,
-                    backgroundColor: Colors.green,
-                    child: CircleAvatar(
-                      radius: 52,
-                      backgroundImage: NetworkImage(
-                        "$baseUrl/${widget.profile.profilePictureUrl}",
-                      ),
-                      onBackgroundImageError: (_, __) {},
-                      backgroundColor: const Color(0xFF333333),
-                    ),
+                const Text(
+                  "Change Password",
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 24,
+                    fontWeight: FontWeight.bold,
                   ),
                 ),
-
-                const SizedBox(height: 16),
+                const SizedBox(height: 24),
 
                 errorBox(),
 
-                const SizedBox(height: 8),
-
-                // Username
-                const Text("Username", style: TextStyle(color: Colors.white)),
+                // Old Password
+                const Text(
+                  "Old Password",
+                  style: TextStyle(color: Colors.white),
+                ),
                 const SizedBox(height: 6),
                 TextField(
-                  controller: usernameController,
+                  controller: oldPasswordController,
+                  obscureText: true,
                   style: const TextStyle(color: Colors.white),
-                  decoration: webInputStyle(),
+                  decoration: webInputStyle("Enter current password"),
                 ),
                 const SizedBox(height: 16),
 
-                // Email
-                const Text("Email", style: TextStyle(color: Colors.white)),
+                // New Password
+                const Text(
+                  "New Password",
+                  style: TextStyle(color: Colors.white),
+                ),
                 const SizedBox(height: 6),
                 TextField(
-                  controller: emailController,
+                  controller: newPassword1Controller,
+                  obscureText: true,
                   style: const TextStyle(color: Colors.white),
-                  decoration: webInputStyle(),
+                  decoration: webInputStyle("Enter new password"),
                 ),
                 const SizedBox(height: 16),
 
-                // Fullname
-                const Text("Full Name", style: TextStyle(color: Colors.white)),
-                const SizedBox(height: 6),
-                TextField(
-                  controller: fullnameController,
-                  style: const TextStyle(color: Colors.white),
-                  decoration: webInputStyle(),
+                // Confirm Password
+                const Text(
+                  "Confirm New Password",
+                  style: TextStyle(color: Colors.white),
                 ),
-                const SizedBox(height: 16),
-
-                // Bio
-                const Text("Bio", style: TextStyle(color: Colors.white)),
                 const SizedBox(height: 6),
                 TextField(
-                  controller: bioController,
-                  maxLines: 4,
+                  controller: newPassword2Controller,
+                  obscureText: true,
                   style: const TextStyle(color: Colors.white),
-                  decoration: webInputStyle(),
+                  decoration: webInputStyle("Re-enter new password"),
                 ),
 
                 const SizedBox(height: 24),
                 const Divider(color: Colors.grey),
+                const SizedBox(height: 16),
 
                 Row(
                   children: [
@@ -268,36 +260,6 @@ class _EditProfilePageState extends State<EditProfilePage> {
                     const SizedBox(width: 12),
                     Expanded(child: saveButton()),
                   ],
-                ),
-
-                const SizedBox(height: 24),
-                const Divider(color: Colors.grey),
-                const SizedBox(height: 16),
-
-                OutlinedButton(
-                  onPressed: () => Navigator.pushReplacement(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => ChangePasswordPage(profile:widget.profile, id: widget.id),
-                    ),
-                  ),
-                  style: OutlinedButton.styleFrom(
-                    side: const BorderSide(color: Color(0xFFD69E2E)),
-                    backgroundColor: const Color(0xFF333333),
-                    foregroundColor: const Color(0xFFF6E05E),
-                    padding: const EdgeInsets.symmetric(vertical: 12),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(8),
-                    ),
-                  ),
-                  child: const Text("Change Password"),
-                ),
-
-                const SizedBox(height: 12),
-                secondaryButton(
-                  "Delete Account",
-                  const Color(0xFFE53E3E),
-                  const Color(0xFFF56565),
                 ),
               ],
             ),
