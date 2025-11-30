@@ -62,7 +62,7 @@ class _ProfilePageState extends State<ProfilePage> {
                       borderRadius: BorderRadius.circular(100),
                       child: Image.network(
                         user.profilePictureUrl.isNotEmpty
-                            ? user.profilePictureUrl
+                            ? "$baseUrl/${user.profilePictureUrl}"
                             : "",
                         width: 120,
                         height: 120,
