@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:nobarpedia_mobile/account/screens/change_password.dart';
+import 'package:nobarpedia_mobile/account/screens/login.dart';
 import 'package:nobarpedia_mobile/account/screens/profile.dart';
 import 'package:nobarpedia_mobile/config.dart';
 import 'package:nobarpedia_mobile/account/models/user_profile.dart';
@@ -78,6 +79,105 @@ class _EditProfilePageState extends State<EditProfilePage> {
       });
     }
   }
+
+  Future<void> _showDeleteConfirmation(BuildContext context) async {
+  return showDialog<void>(
+    context: context,
+    barrierDismissible: false, // User harus klik button biar ngeclose
+    builder: (BuildContext context) {
+      return AlertDialog(
+        backgroundColor: const Color(0xFF333333),
+        title: const Text(
+          'Delete Account',
+          style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+        ),
+        content: const SingleChildScrollView(
+          child: ListBody(
+            children: <Widget>[
+              Text(
+                'Are you sure you want to delete your account?',
+                style: TextStyle(color: Colors.white70),
+              ),
+              SizedBox(height: 10),
+              Text(
+                'This action cannot be undone.',
+                style: TextStyle(color: Colors.redAccent, fontSize: 13),
+              ),
+            ],
+          ),
+        ),
+        actions: <Widget>[
+          // Cancel Button
+          TextButton(
+            child: const Text(
+              'Cancel',
+              style: TextStyle(color: Colors.white70),
+            ),
+            onPressed: () {
+              Navigator.of(context).pop(); // Close dialog
+            },
+          ),
+          // Delete Button
+          TextButton(
+            child: const Text(
+              'Delete',
+              style: TextStyle(color: Colors.redAccent, fontWeight: FontWeight.bold),
+            ),
+            onPressed: () {
+              Navigator.of(context).pop(); 
+              
+              _performDeleteAccount(); 
+            },
+          ),
+        ],
+      );
+    },
+  );
+}
+
+Future<void> _performDeleteAccount() async {
+  final request = context.read<CookieRequest>();
+
+  try {
+    final response = await request.post(
+      "$baseUrl/account/api/delete_profile/${widget.id}/", 
+      {}, 
+    );
+
+    if (!context.mounted) return;
+
+    if (response['status'] == true) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text("Account deleted successfully."),
+        ),
+      );
+      
+      Navigator.pushAndRemoveUntil(
+        context,
+        MaterialPageRoute(builder: (context) => const LoginPage()), 
+        (route) => false,
+      );
+      
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(response['message'] ?? "Failed to delete account"),
+          backgroundColor: const Color(0xFFE53E3E),
+        ),
+      );
+    }
+  } catch (e) {
+    if (context.mounted) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text("Error on delete_profile: $e"),
+          backgroundColor: const Color(0xFFE53E3E),
+        ),
+      );
+    }
+  }
+}
 
   Widget errorBox() {
     if (errors == null) return const SizedBox.shrink();
@@ -292,12 +392,18 @@ class _EditProfilePageState extends State<EditProfilePage> {
                   ),
                   child: const Text("Change Password"),
                 ),
-
-                const SizedBox(height: 12),
-                secondaryButton(
-                  "Delete Account",
-                  const Color(0xFFE53E3E),
-                  const Color(0xFFF56565),
+                OutlinedButton(
+                  onPressed: () => _showDeleteConfirmation(context),
+                  style: OutlinedButton.styleFrom(
+                    side: const BorderSide(color: Color(0xFFE53E3E)),
+                    backgroundColor: const Color(0xFF333333),
+                    foregroundColor: const Color(0xFFF56565),
+                    padding: const EdgeInsets.symmetric(vertical: 12),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                  ),
+                  child: const Text("Delete Account"),
                 ),
               ],
             ),
