@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:nobarpedia_mobile/account/screens/edit_profile_page.dart';
 import 'package:nobarpedia_mobile/config.dart';
 import 'package:provider/provider.dart';
 import 'package:pbp_django_auth/pbp_django_auth.dart';
@@ -58,15 +59,18 @@ class _ProfilePageState extends State<ProfilePage> {
                 child: Column(
                   children: [
                     // PROFILE PICTURE
-                    ClipRRect(
-                      borderRadius: BorderRadius.circular(100),
-                      child: Image.network(
-                        user.profilePictureUrl.isNotEmpty
-                            ? "$baseUrl/${user.profilePictureUrl}"
-                            : "",
-                        width: 120,
-                        height: 120,
-                        fit: BoxFit.cover,
+                    Center(
+                      child: CircleAvatar(
+                        radius: 55,
+                        backgroundColor: Colors.green,
+                        child: CircleAvatar(
+                          radius: 52,
+                          backgroundImage: NetworkImage(
+                            "$baseUrl/${user.profilePictureUrl}",
+                          ),
+                          onBackgroundImageError: (_, __) {},
+                          backgroundColor: const Color(0xFF333333),
+                        ),
                       ),
                     ),
 
@@ -92,14 +96,24 @@ class _ProfilePageState extends State<ProfilePage> {
                       SizedBox(
                         width: double.infinity,
                         child: ElevatedButton(
-                          onPressed: () {},
+                          onPressed: () {
+                            Navigator.pushReplacement(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => EditProfilePage(
+                                  profile: user,
+                                  id: widget.userId,
+                                ),
+                              ),
+                            );
+                          },
                           style: ElevatedButton.styleFrom(
                             backgroundColor: Colors.green,
                             padding: const EdgeInsets.symmetric(vertical: 14),
                           ),
                           child: const Text(
                             "Edit Profile",
-                            style: TextStyle(fontSize: 16),
+                            style: TextStyle(color: Colors.white, fontSize: 16),
                           ),
                         ),
                       ),
