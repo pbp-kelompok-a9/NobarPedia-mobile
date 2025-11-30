@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:nobarpedia_mobile/account/screens/login.dart';
+import 'package:nobarpedia_mobile/account/screens/profile.dart';
 import 'package:nobarpedia_mobile/account/screens/register.dart';
 import 'package:nobarpedia_mobile/homepage/menu.dart';
 import 'package:nobarpedia_mobile/join/models/nobar_spot.dart';
@@ -39,6 +40,15 @@ final NobarSpot nobarSpot = NobarSpot.fromJson(json.decode(jsonString));
 
 class LeftDrawer extends StatelessWidget {
   const LeftDrawer({super.key});
+
+  Future<int?> fetchUserId(CookieRequest request) async {
+    try {
+      final data = await request.get("$baseUrl/account/api/current_user_id/");
+      return data["id"]; 
+    } catch (_) {
+      return null;
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -131,14 +141,31 @@ class LeftDrawer extends StatelessWidget {
           if (request.loggedIn) ...[
             // Kalo user udah login, tampilkan button
             // PROFIL USER dan LOGOUT
-            ListTile(
-              leading: const Icon(Icons.account_circle_rounded, color: Colors.grey),
-              title: const Text('Profile', style: TextStyle(color: Colors.grey)),
-              onTap: () {
-                // TODO: Redirect to Profile Page
-                Navigator.pushReplacement(
-                  context,
-                  MaterialPageRoute(builder: (context) => MyHomePage()),
+            FutureBuilder<int?>(
+              future: fetchUserId(request),
+              builder: (context, snapshot) {
+                if (!snapshot.hasData) {
+                  return const ListTile(
+                    title: Text(
+                      "Loading...",
+                      style: TextStyle(color: Colors.grey),
+                    ),
+                  );
+                }
+
+                final userId = snapshot.data;
+
+                return ListTile(
+                  leading: const Icon(Icons.account_circle_rounded, color: Colors.grey),
+                  title: const Text('Profile', style: TextStyle(color: Colors.grey)),
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => ProfilePage(userId: userId!),
+                      ),
+                    );
+                  },
                 );
               },
             ),
@@ -147,7 +174,7 @@ class LeftDrawer extends StatelessWidget {
               title: const Text('Logout', style: TextStyle(color: Colors.grey)),
               onTap: () async {
                 final response = await request.logout(
-                  "$baseUrl/account/logout_flutter/",
+                  "$baseUrl/account/api/logout/",
                 );
                 String message = response["message"];
                 if (context.mounted) {
