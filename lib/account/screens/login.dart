@@ -1,3 +1,5 @@
+import 'package:flutter/gestures.dart';
+import 'package:nobarpedia_mobile/account/screens/admin_account_page.dart';
 import 'package:nobarpedia_mobile/config.dart';
 import 'package:nobarpedia_mobile/homepage/menu.dart';
 import 'package:flutter/material.dart';
@@ -43,7 +45,7 @@ class _LoginPageState extends State<LoginPage> {
     final request = context.watch<CookieRequest>();
 
     return Scaffold(
-      appBar: AppBar(title: const Text('Login')),
+      appBar: AppBar(title: const Text('Sign In')),
       body: Center(
         child: SingleChildScrollView(
           padding: const EdgeInsets.all(16.0),
@@ -58,7 +60,7 @@ class _LoginPageState extends State<LoginPage> {
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   const Text(
-                    'Login',
+                    'Sign In',
                     style: TextStyle(
                       fontSize: 24.0,
                       fontWeight: FontWeight.bold,
@@ -106,27 +108,44 @@ class _LoginPageState extends State<LoginPage> {
                       // To connect Android emulator with Django on localhost, use URL http://10.0.2.2/
                       // If you using chrome,  use URL http://localhost:8000
                       final response = await request.login(
-                        "$baseUrl/auth/login/",
+                        "$baseUrl/account/api/login/",
                         {'username': username, 'password': password},
                       );
 
                       if (request.loggedIn) {
                         String message = response['message'];
                         String uname = response['username'];
+                        bool isAdmin = response['is_admin'];
                         if (context.mounted) {
-                          Navigator.pushReplacement(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => MyHomePage(),
-                            ),
-                          );
-                          ScaffoldMessenger.of(context)
-                            ..hideCurrentSnackBar()
-                            ..showSnackBar(
-                              SnackBar(
-                                content: Text("$message Welcome, $uname."),
+                          if (isAdmin) {
+                            Navigator.pushReplacement(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => AdminAccountPage(),
                               ),
                             );
+                            ScaffoldMessenger.of(context)
+                              ..hideCurrentSnackBar()
+                              ..showSnackBar(
+                                SnackBar(
+                                  content: Text("$message Welcome, $uname."),
+                                ),
+                              );
+                          } else {
+                            Navigator.pushReplacement(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => MyHomePage(),
+                              ),
+                            );
+                            ScaffoldMessenger.of(context)
+                              ..hideCurrentSnackBar()
+                              ..showSnackBar(
+                                SnackBar(
+                                  content: Text("$message Welcome, $uname."),
+                                ),
+                              );
+                          }
                         }
                       } else {
                         if (context.mounted) {
@@ -154,24 +173,63 @@ class _LoginPageState extends State<LoginPage> {
                       backgroundColor: Theme.of(context).colorScheme.primary,
                       padding: const EdgeInsets.symmetric(vertical: 16.0),
                     ),
-                    child: const Text('Login'),
+                    child: const Text('Sign In'),
                   ),
                   const SizedBox(height: 36.0),
-                  GestureDetector(
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => const RegisterPage(),
+                  RichText(
+                    text: TextSpan(
+                      style: TextStyle(color: Colors.white, fontSize: 16.0),
+                      children: [
+                        const TextSpan(text: "Don't have an account? "),
+                        TextSpan(
+                          text: "Register",
+                          style: TextStyle(
+                            color: Theme.of(context).colorScheme.primary,
+                            fontWeight: FontWeight.bold,
+                          ),
+                          recognizer: TapGestureRecognizer()
+                            ..onTap = () {
+                              Navigator.pushReplacement(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => const RegisterPage(),
+                                ),
+                              );
+                            },
                         ),
-                      );
-                    },
-                    child: Text(
-                      'Don\'t have an account? Register',
-                      style: TextStyle(
-                        color: Theme.of(context).colorScheme.primary,
-                        fontSize: 16.0,
-                      ),
+                      ],
+                    ),
+                  ),
+                  const SizedBox(height: 10.0),
+                  RichText(
+                    text: TextSpan(
+                      style: TextStyle(color: Colors.white, fontSize: 16.0),
+                      children: [const TextSpan(text: "Or")],
+                    ),
+                  ),
+                  const SizedBox(height: 10.0),
+                  RichText(
+                    text: TextSpan(
+                      style: TextStyle(color: Colors.white, fontSize: 16.0),
+                      children: [
+                        const TextSpan(text: "Continue as "),
+                        TextSpan(
+                          text: "Guest",
+                          style: TextStyle(
+                            color: Theme.of(context).colorScheme.primary,
+                            fontWeight: FontWeight.bold,
+                          ),
+                          recognizer: TapGestureRecognizer()
+                            ..onTap = () {
+                              Navigator.pushReplacement(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => MyHomePage(),
+                                ),
+                              );
+                            },
+                        ),
+                      ],
                     ),
                   ),
                 ],
