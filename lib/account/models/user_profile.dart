@@ -15,6 +15,7 @@ class UserProfile {
     String bio;
     String profilePictureUrl;
     bool showUpdateButton;
+    bool isAdmin;
 
     UserProfile({
         required this.username,
@@ -23,6 +24,7 @@ class UserProfile {
         required this.bio,
         required this.profilePictureUrl,
         required this.showUpdateButton,
+        required this.isAdmin,
     });
 
     factory UserProfile.fromJson(Map<String, dynamic> json) => UserProfile(
@@ -32,6 +34,7 @@ class UserProfile {
         bio: json["bio"],
         profilePictureUrl: json["profile_picture_url"],
         showUpdateButton: json["show_update_button"],
+        isAdmin: json["is_admin"],
     );
 
     Map<String, dynamic> toJson() => {
@@ -41,5 +44,6 @@ class UserProfile {
         "bio": bio,
         "profile_picture_url": profilePictureUrl,
         "show_update_button": showUpdateButton,
+        "is_admin": isAdmin,
     };
 }

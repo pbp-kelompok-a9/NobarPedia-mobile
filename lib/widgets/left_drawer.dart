@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:nobarpedia_mobile/account/screens/admin_account_page.dart';
 import 'package:nobarpedia_mobile/account/screens/login.dart';
 import 'package:nobarpedia_mobile/account/screens/profile.dart';
 import 'package:nobarpedia_mobile/account/screens/register.dart';
@@ -140,8 +141,6 @@ class LeftDrawer extends StatelessWidget {
     );
   }
 
-  
-
   Widget profileOption(BuildContext context, request, userId) {
     return ListTile(
       leading: const Icon(Icons.account_circle_rounded, color: Colors.grey),
@@ -150,6 +149,76 @@ class LeftDrawer extends StatelessWidget {
         Navigator.push(
           context,
           MaterialPageRoute(builder: (context) => ProfilePage(userId: userId)),
+        );
+      },
+    );
+  }
+
+  Widget accountAdminPageOption(BuildContext context) {
+    return ListTile(
+      leading: const Icon(Icons.manage_accounts, color: Colors.grey),
+      title: const Text('Account', style: TextStyle(color: Colors.grey)),
+      onTap: () {
+        Navigator.pushReplacement(
+          context,
+          // TODO: ganti dengan page admin masing2 module yeah
+          MaterialPageRoute(builder: (context) => AdminAccountPage()),
+        );
+      },
+    );
+  }
+
+  Widget homepageAdminPageOption(BuildContext context) {
+    return ListTile(
+      leading: const Icon(Icons.home_sharp, color: Colors.grey),
+      title: const Text('Homepage', style: TextStyle(color: Colors.grey)),
+      onTap: () {
+        Navigator.pushReplacement(
+          context,
+          // TODO: ganti dengan page admin masing2 module yeah
+          MaterialPageRoute(builder: (context) => AdminAccountPage()),
+        );
+      },
+    );
+  }
+
+  Widget joinAdminPageOption(BuildContext context) {
+    return ListTile(
+      leading: const Icon(Icons.connect_without_contact_rounded, color: Colors.grey),
+      title: const Text('Join', style: TextStyle(color: Colors.grey)),
+      onTap: () {
+        Navigator.pushReplacement(
+          context,
+          // TODO: ganti dengan page admin masing2 module yeah
+          MaterialPageRoute(builder: (context) => AdminAccountPage()),
+        );
+      },
+    );
+  }
+
+  Widget matchAdminPageOption(BuildContext context) {
+    return ListTile(
+      leading: const Icon(Icons.sports_basketball, color: Colors.grey),
+      title: const Text('Match', style: TextStyle(color: Colors.grey)),
+      onTap: () {
+        Navigator.pushReplacement(
+          context,
+          // TODO: ganti dengan page admin masing2 module yeah
+          MaterialPageRoute(builder: (context) => AdminAccountPage()),
+        );
+      },
+    );
+  }  
+  
+  Widget reviewAdminPageOption(BuildContext context) {
+    return ListTile(
+      leading: const Icon(Icons.rate_review_rounded, color: Colors.grey),
+      title: const Text('Review', style: TextStyle(color: Colors.grey)),
+      onTap: () {
+        Navigator.pushReplacement(
+          context,
+          // TODO: ganti dengan page admin masing2 module yeah
+          MaterialPageRoute(builder: (context) => AdminAccountPage()),
         );
       },
     );
@@ -200,7 +269,15 @@ class LeftDrawer extends StatelessWidget {
           return Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              // TODO: tambahin option admin page dari masing2 module...
+              // tambahin option admin page dari masing2 module...
+              accountAdminPageOption(context),
+              homepageAdminPageOption(context),
+              joinAdminPageOption(context),
+              matchAdminPageOption(context),
+              reviewAdminPageOption(context),
+            const SizedBox(height: 7),
+              const Divider(color: Colors.grey),
+            const SizedBox(height: 7),
               profileOption(context, request, userId),
               logoutOption(context, request),
             ],
@@ -208,12 +285,15 @@ class LeftDrawer extends StatelessWidget {
         }
 
         return Column(
-          mainAxisSize: MainAxisSize.min, 
+          mainAxisSize: MainAxisSize.min,
           children: [
             homeOption(context),
             joinedSpotsOption(context),
             mySpotsOption(context),
             joinFormOption(context),
+            const SizedBox(height: 1),
+            const Divider(color: Colors.grey),
+            const SizedBox(height: 1),
             profileOption(context, request, userId),
             logoutOption(context, request),
           ],

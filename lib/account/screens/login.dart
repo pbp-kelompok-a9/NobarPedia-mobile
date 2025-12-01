@@ -1,4 +1,5 @@
 import 'package:flutter/gestures.dart';
+import 'package:nobarpedia_mobile/account/screens/admin_account_page.dart';
 import 'package:nobarpedia_mobile/config.dart';
 import 'package:nobarpedia_mobile/homepage/menu.dart';
 import 'package:flutter/material.dart';
@@ -114,20 +115,37 @@ class _LoginPageState extends State<LoginPage> {
                       if (request.loggedIn) {
                         String message = response['message'];
                         String uname = response['username'];
+                        bool isAdmin = response['is_admin'];
                         if (context.mounted) {
-                          Navigator.pushReplacement(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => MyHomePage(),
-                            ),
-                          );
-                          ScaffoldMessenger.of(context)
-                            ..hideCurrentSnackBar()
-                            ..showSnackBar(
-                              SnackBar(
-                                content: Text("$message Welcome, $uname."),
+                          if (isAdmin) {
+                            Navigator.pushReplacement(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => AdminAccountPage(),
                               ),
                             );
+                            ScaffoldMessenger.of(context)
+                              ..hideCurrentSnackBar()
+                              ..showSnackBar(
+                                SnackBar(
+                                  content: Text("$message Welcome, $uname."),
+                                ),
+                              );
+                          } else {
+                            Navigator.pushReplacement(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => MyHomePage(),
+                              ),
+                            );
+                            ScaffoldMessenger.of(context)
+                              ..hideCurrentSnackBar()
+                              ..showSnackBar(
+                                SnackBar(
+                                  content: Text("$message Welcome, $uname."),
+                                ),
+                              );
+                          }
                         }
                       } else {
                         if (context.mounted) {
@@ -186,7 +204,7 @@ class _LoginPageState extends State<LoginPage> {
                   RichText(
                     text: TextSpan(
                       style: TextStyle(color: Colors.white, fontSize: 16.0),
-                      children: [ const TextSpan(text: "Or") ],
+                      children: [const TextSpan(text: "Or")],
                     ),
                   ),
                   const SizedBox(height: 10.0),
