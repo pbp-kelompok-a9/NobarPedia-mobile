@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:nobarpedia_mobile/account/models/user_profile.dart';
 import 'package:nobarpedia_mobile/account/widget/user_card.dart';
 import 'package:nobarpedia_mobile/config.dart';
 import 'package:nobarpedia_mobile/widgets/left_drawer.dart';
@@ -13,12 +14,13 @@ class AdminAccountPage extends StatefulWidget {
 }
 
 class _AdminAccountPage extends State<AdminAccountPage> {
-  Future<List<dynamic>> fetchAllUser(CookieRequest request) async {
+  Future<List<UserProfile>> fetchAllUser(CookieRequest request) async {
     final response = await request.get('$baseUrl/account/api/admin/');
 
-    // tiap user punya: is_admin, id, username
-    List<dynamic> data = response['responseData'];
-    return data;
+    List<dynamic> temp = response['responseData'];
+  
+  // Convert list of JSON objects -> List of UserProfile objects
+  return temp.map((item) => UserProfile.fromJson(item)).toList();
   }
 
   @override

@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:nobarpedia_mobile/account/models/user_profile.dart';
+import 'package:nobarpedia_mobile/account/screens/admin_edit_profile_page.dart';
 import 'package:pbp_django_auth/pbp_django_auth.dart';
 import 'package:nobarpedia_mobile/config.dart';
 
 class UserCard extends StatelessWidget {
-  final Map<String, dynamic> userData;
+  final UserProfile userData;
   final CookieRequest request;
   final VoidCallback onRefresh; 
 
@@ -16,10 +18,10 @@ class UserCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final int userId = userData['id'];
-    final String username = userData['username'];
-    final bool isAdmin = userData['is_admin'] ?? false;
-    final String profilePictureUrl = userData['profile_picture_url'];
+    final int userId = userData.id;
+    final String username = userData.username;
+    final bool isAdmin = userData.isAdmin;
+    final String profilePictureUrl = userData.profilePictureUrl;
 
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
@@ -96,13 +98,13 @@ class UserCard extends StatelessWidget {
             children: [
               // Edit Button
               IconButton(
-                icon: const Icon(Icons.edit_outlined, color: Colors.white),
+                icon: const Icon(Icons.edit_outlined, color: Colors.green),
                 tooltip: 'Edit User',
                 onPressed: () async {
-                  // Navigator.push(
-                  //   context,
-                  //   MaterialPageRoute(builder: builder)
-                  // );
+                  Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(builder: (context) => AdminEditProfilePage(currentUser: userData))
+                  );
                 },
               ),
 
