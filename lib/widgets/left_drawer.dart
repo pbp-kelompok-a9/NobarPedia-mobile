@@ -41,13 +41,185 @@ final NobarSpot nobarSpot = NobarSpot.fromJson(json.decode(jsonString));
 class LeftDrawer extends StatelessWidget {
   const LeftDrawer({super.key});
 
-  Future<int?> fetchUserId(CookieRequest request) async {
+  Future<List<dynamic>?> fetchUserIdAndRole(CookieRequest request) async {
     try {
       final data = await request.get("$baseUrl/account/api/current_user_id/");
-      return data["id"]; 
+      return [data["id"], data["is_admin"]];
     } catch (_) {
       return null;
     }
+  }
+
+  Widget homeOption(BuildContext context) {
+    return ListTile(
+      leading: const Icon(Icons.home_outlined, color: Colors.grey),
+      title: const Text('Home', style: TextStyle(color: Colors.grey)),
+      onTap: () {
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) => MyHomePage()),
+        );
+      },
+    );
+  }
+
+  Widget joinedSpotsOption(BuildContext context) {
+    return ListTile(
+      leading: const Icon(Icons.list_alt),
+      title: const Text('Joined Spots', style: TextStyle(color: Colors.grey)),
+      onTap: () {
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) => JoinPage()),
+        );
+      },
+    );
+  }
+
+  Widget mySpotsOption(BuildContext context) {
+    return ListTile(
+      leading: const Icon(Icons.person_outline, color: Colors.grey),
+      title: const Text('My Spots', style: TextStyle(color: Colors.grey)),
+      onTap: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => const JoinPage(mine: true)),
+        );
+      },
+    );
+  }
+
+  Widget joinFormOption(BuildContext context) {
+    // TODO: remove when review module has been integrated
+    return ListTile(
+      leading: const Icon(Icons.add_box_outlined, color: Colors.grey),
+      title: const Text(
+        'Join form (TEMP)',
+        style: TextStyle(color: Colors.grey),
+      ),
+      onTap: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => CreateJoinPage(
+              id: nobarSpot.id,
+              name: nobarSpot.name,
+              city: nobarSpot.city,
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+  Widget loginOption(BuildContext context) {
+    return ListTile(
+      leading: const Icon(Icons.login, color: Colors.grey),
+      title: const Text('Login', style: TextStyle(color: Colors.grey)),
+      onTap: () {
+        // Redirect to Login Page
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) => LoginPage()),
+        );
+      },
+    );
+  }
+
+  Widget registerOption(BuildContext context) {
+    return ListTile(
+      leading: const Icon(Icons.create_outlined, color: Colors.grey),
+      title: const Text('Register', style: TextStyle(color: Colors.grey)),
+      onTap: () {
+        // Redirect to Login Page
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) => RegisterPage()),
+        );
+      },
+    );
+  }
+
+  
+
+  Widget profileOption(BuildContext context, request, userId) {
+    return ListTile(
+      leading: const Icon(Icons.account_circle_rounded, color: Colors.grey),
+      title: const Text('Profile', style: TextStyle(color: Colors.grey)),
+      onTap: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => ProfilePage(userId: userId)),
+        );
+      },
+    );
+  }
+
+  Widget logoutOption(BuildContext context, request) {
+    return ListTile(
+      leading: const Icon(Icons.logout, color: Colors.grey),
+      title: const Text('Logout', style: TextStyle(color: Colors.grey)),
+      onTap: () async {
+        final response = await request.logout("$baseUrl/account/api/logout/");
+        String message = response["message"];
+        if (context.mounted) {
+          if (response['status']) {
+            String uname = response["username"];
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(content: Text("$message See you again, $uname.")),
+            );
+            Navigator.pushAndRemoveUntil(
+              context,
+              MaterialPageRoute(builder: (context) => const LoginPage()),
+              (route) => false,
+            );
+          } else {
+            ScaffoldMessenger.of(
+              context,
+            ).showSnackBar(SnackBar(content: Text(message)));
+          }
+        }
+      },
+    );
+  }
+
+  Widget loggedInDrawerBuilder(BuildContext context, request) {
+    return FutureBuilder<List<dynamic>?>(
+      future: fetchUserIdAndRole(request),
+      builder: (context, snapshot) {
+        if (!snapshot.hasData) {
+          return const ListTile(
+            title: Text("Loading...", style: TextStyle(color: Colors.grey)),
+          );
+        }
+
+        final userId = snapshot.data?[0] as int;
+        final isAdmin = snapshot.data?[1] as bool;
+
+        if (isAdmin) {
+          return Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              // TODO: tambahin option admin page dari masing2 module...
+              profileOption(context, request, userId),
+              logoutOption(context, request),
+            ],
+          );
+        }
+
+        return Column(
+          mainAxisSize: MainAxisSize.min, 
+          children: [
+            homeOption(context),
+            joinedSpotsOption(context),
+            mySpotsOption(context),
+            joinFormOption(context),
+            profileOption(context, request, userId),
+            logoutOption(context, request),
+          ],
+        );
+      },
+    );
   }
 
   @override
@@ -83,151 +255,18 @@ class LeftDrawer extends StatelessWidget {
               ],
             ),
           ),
-          ListTile(
-            leading: const Icon(Icons.home_outlined, color: Colors.grey),
-            title: const Text('Home', style: TextStyle(color: Colors.grey)),
-            onTap: () {
-              Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(builder: (context) => MyHomePage()),
-              );
-            },
-          ),
-          ListTile(
-            leading: const Icon(Icons.list_alt),
-            title: const Text(
-              'Joined Spots',
-              style: TextStyle(color: Colors.grey),
-            ),
-            onTap: () {
-              Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(builder: (context) => JoinPage()),
-              );
-            },
-          ),
-          ListTile(
-            leading: const Icon(Icons.person_outline, color: Colors.grey),
-            title: const Text('My Spots', style: TextStyle(color: Colors.grey)),
-            onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => const JoinPage(mine: true),
-                ),
-              );
-            },
-          ),
-          // TODO: remove when review module has been integrated
-          ListTile(
-            leading: const Icon(Icons.add_box_outlined, color: Colors.grey),
-            title: const Text(
-              'Join form (TEMP)',
-              style: TextStyle(color: Colors.grey),
-            ),
-            onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => CreateJoinPage(
-                    id: nobarSpot.id,
-                    name: nobarSpot.name,
-                    city: nobarSpot.city,
-                  ),
-                ),
-              );
-            },
-          ),
+
           if (request.loggedIn) ...[
-            // Kalo user udah login, tampilkan button
-            // PROFIL USER dan LOGOUT
-            FutureBuilder<int?>(
-              future: fetchUserId(request),
-              builder: (context, snapshot) {
-                if (!snapshot.hasData) {
-                  return const ListTile(
-                    title: Text(
-                      "Loading...",
-                      style: TextStyle(color: Colors.grey),
-                    ),
-                  );
-                }
-
-                final userId = snapshot.data;
-
-                return ListTile(
-                  leading: const Icon(Icons.account_circle_rounded, color: Colors.grey),
-                  title: const Text('Profile', style: TextStyle(color: Colors.grey)),
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => ProfilePage(userId: userId!),
-                      ),
-                    );
-                  },
-                );
-              },
-            ),
-            ListTile(
-              leading: const Icon(Icons.logout, color: Colors.grey),
-              title: const Text('Logout', style: TextStyle(color: Colors.grey)),
-              onTap: () async {
-                final response = await request.logout(
-                  "$baseUrl/account/api/logout/",
-                );
-                String message = response["message"];
-                if (context.mounted) {
-                  if (response['status']) {
-                    String uname = response["username"];
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(
-                        content: Text("$message See you again, $uname."),
-                      ),
-                    );
-                    Navigator.pushAndRemoveUntil(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => const LoginPage(),
-                      ),
-                      (route) => false,
-                    );
-                  } else {
-                    ScaffoldMessenger.of(
-                      context,
-                    ).showSnackBar(SnackBar(content: Text(message)));
-                  }
-                }
-              },
-            ),
+            // Kalo user udah login
+            loggedInDrawerBuilder(context, request),
           ] else ...[
-            // Kalo user BELUM login, tampilkan button
-            // LOGIN dan REGISTER
-            ListTile(
-              leading: const Icon(Icons.login, color: Colors.grey),
-              title: const Text('Login', style: TextStyle(color: Colors.grey)),
-              onTap: () {
-                // Redirect to Login Page
-                Navigator.pushReplacement(
-                  context,
-                  MaterialPageRoute(builder: (context) => LoginPage()),
-                );
-              },
-            ),
-            ListTile(
-              leading: const Icon(Icons.create_outlined, color: Colors.grey),
-              title: const Text(
-                'Register',
-                style: TextStyle(color: Colors.grey),
-              ),
-              onTap: () {
-                // Redirect to Login Page
-                Navigator.pushReplacement(
-                  context,
-                  MaterialPageRoute(builder: (context) => RegisterPage()),
-                );
-              },
-            ),
+            // Kalo user BELUM login
+            homeOption(context),
+            joinedSpotsOption(context),
+            mySpotsOption(context),
+            joinFormOption(context),
+            loginOption(context),
+            registerOption(context),
           ],
         ],
       ),
