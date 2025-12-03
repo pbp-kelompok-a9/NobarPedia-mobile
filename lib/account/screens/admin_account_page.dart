@@ -18,6 +18,7 @@ class _AdminAccountPage extends State<AdminAccountPage> {
     final response = await request.get('$baseUrl/account/api/admin/');
 
     List<dynamic> temp = response['responseData'];
+    // print(temp.map((item) => UserProfile.fromJson(item)));
   
   // Convert list of JSON objects -> List of UserProfile objects
   return temp.map((item) => UserProfile.fromJson(item)).toList();

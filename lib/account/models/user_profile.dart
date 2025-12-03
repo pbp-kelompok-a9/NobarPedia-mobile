@@ -31,14 +31,14 @@ class UserProfile {
   });
 
   factory UserProfile.fromJson(Map<String, dynamic> json) => UserProfile(
-    id: json["id"],
-    username: json["username"],
-    email: json["email"],
-    fullname: json["fullname"],
-    bio: json["bio"],
-    profilePictureUrl: json["profile_picture_url"],
-    showUpdateButton: json["show_update_button"],
-    isAdmin: json["is_admin"],
+    id: json["id"]??0,
+    username: json["username"]??"",
+    email: json["email"]??"",
+    fullname: json["fullname"]??"",
+    bio: json["bio"]??"",
+    profilePictureUrl: json["profile_picture_url"]??"",
+    showUpdateButton: json["show_update_button"]??"",
+    isAdmin: json["is_admin"]??false,
   );
 
   Map<String, dynamic> toJson() => {
