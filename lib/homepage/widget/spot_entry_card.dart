@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../models/spot_entry.dart';
+import 'package:nobarpedia_mobile/config.dart';
 
 class SpotEntryCard extends StatelessWidget {
   final SpotEntry spot;
@@ -41,7 +42,7 @@ class SpotEntryCard extends StatelessWidget {
                 ClipRRect(
                   borderRadius: BorderRadius.circular(6),
                   child: Image.network(
-                    'http://localhost:8000/proxy-image/?url=${Uri.encodeComponent(spot.thumbnail)}',
+                    '$baseUrl/proxy-image/?url=${Uri.encodeComponent(spot.thumbnail)}',
                     height: 180,
                     width: double.infinity,
                     fit: BoxFit.cover,
@@ -107,6 +108,47 @@ class SpotEntryCard extends StatelessWidget {
                   ),
                 ),
                 const SizedBox(height: 6),
+
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Expanded(
+                      child: ElevatedButton(
+                        onPressed: () {
+                          // Aksi join
+                        },
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.green,
+                          foregroundColor: Colors.white,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                          padding: const EdgeInsets.symmetric(vertical: 12),
+                        ),
+                        child: const Text(
+                          "Join",
+                          style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                        ),
+                      ),
+                    ),
+
+                    const SizedBox(width: 16),
+                    IconButton(
+                      onPressed: () {
+                        // Aksi edit
+                      },
+                      icon: const Icon(Icons.edit, color: Colors.green, size: 26),
+                    ),
+
+                    IconButton(
+                      onPressed: () {
+                        // Aksi delete
+                      },
+                      icon: const Icon(Icons.delete, color: Colors.red, size: 26),
+                    ),
+                  ],
+                )
+
 
               ],
             ),

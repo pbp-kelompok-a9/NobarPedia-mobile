@@ -4,6 +4,8 @@ import '../models/spot_entry.dart';
 import '../widget/spot_entry_card.dart';
 import 'package:pbp_django_auth/pbp_django_auth.dart';
 import 'package:provider/provider.dart';
+import 'package:nobarpedia_mobile/config.dart';
+import 'spot_form.dart';
 // import 'package:nobarpedia_mobile/widgets/product_card.dart';
 
 class MyHomePage extends StatelessWidget {
@@ -13,7 +15,7 @@ class MyHomePage extends StatelessWidget {
     // To connect Android emulator with Django on localhost, use URL http://10.0.2.2/
     // If you using chrome,  use URL http://localhost:8000
     
-    final response = await request.get('http://localhost:8000/show_json/');
+    final response = await request.get("$baseUrl/show_json/");
     
     // Decode response to json format
     var data = response;
@@ -57,6 +59,108 @@ class MyHomePage extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
+
+            Column(
+              children: [
+                // ClipRRect(
+                //   borderRadius: BorderRadius.circular(12),
+                //   child: Image.asset(
+                //     '', //path gambar
+                //     height: 160,
+                //     width: double.infinity,
+                //     fit: BoxFit.cover,
+                //   ),
+                // ),
+
+                const SizedBox(height: 20),
+
+                const Text(
+                  "Welcome to NobarPedia",
+                  style: TextStyle(
+                    fontSize: 22,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white,
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+
+                const SizedBox(height: 10),
+
+                const Text(
+                  "Temukan tempat nobar terbaik di sekitarmu. Gabung komunitas sesama pecinta bola dan rasakan atmosfer pertandingan bersama!",
+                  style: TextStyle(
+                    fontSize: 14,
+                    color: Colors.white70,
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+
+                const SizedBox(height: 16),
+
+                ElevatedButton(
+                  onPressed: () {
+                    Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => const SpotFormPage()));
+                  },
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.green,
+                    padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                  ),
+                  child: const Text("Add New Spot",
+                          style: TextStyle(
+                            color:Colors.white
+                          ),),
+                ),
+
+                const SizedBox(height: 60),
+
+                const Text(
+                  "Pick Your Spot",
+                  style: TextStyle(
+                    fontSize: 20,
+                    color: Colors.white,
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+
+                const SizedBox(height: 20),
+
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    ElevatedButton(
+                      onPressed: () {},
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.green,
+                        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                      ),
+                      child: const Text("All Spot",
+                        style: TextStyle(color: Colors.white),),
+                    ),
+                    const SizedBox(width: 10),
+
+                    OutlinedButton(
+                      onPressed: () {},
+                      style: OutlinedButton.styleFrom(
+                        side: const BorderSide(color: Colors.green),
+                        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                      ),
+                      child: const Text("Your Spot",
+                            style: TextStyle(color: Colors.white),),
+                    ),
+                  ],
+                ),
+
+                const SizedBox(height: 8),
+
+
+
+              ],
+            ),
+
             Expanded(
               child: FutureBuilder(
                 future: fetchSpot(context.watch<CookieRequest>()),

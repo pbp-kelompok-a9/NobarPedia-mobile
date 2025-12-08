@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import '../models/spot_entry.dart';
 import '../../widgets/left_drawer.dart';
-// import '../screens/spot_detail.dart';
 import '../widget/spot_entry_card.dart';
 import 'package:provider/provider.dart';
 import 'package:pbp_django_auth/pbp_django_auth.dart';
+import 'package:nobarpedia_mobile/config.dart';
 
 class SpotEntryListPage extends StatefulWidget {
   const SpotEntryListPage({super.key});
@@ -19,7 +19,7 @@ class _SpotEntryListPageState extends State<SpotEntryListPage> {
     // To connect Android emulator with Django on localhost, use URL http://10.0.2.2/
     // If you using chrome,  use URL http://localhost:8000
     
-    final response = await request.get('http://localhost:8000/show_json/');
+    final response = await request.get('$baseUrl/show_json/');
     
     // Decode response to json format
     var data = response;
