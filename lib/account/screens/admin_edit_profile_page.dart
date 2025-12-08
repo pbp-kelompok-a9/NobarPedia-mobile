@@ -128,13 +128,12 @@ class _AdminEditProfilePageState extends State<AdminEditProfilePage> {
   InputDecoration _buildInputDecoration(String label) {
     return InputDecoration(
       labelText: label,
-      labelStyle: const TextStyle(color: Colors.white),
       filled: true,
-      fillColor: const Color(0xFF333333), // --Neutral-900
-      contentPadding: const EdgeInsets.symmetric(vertical: 10, horizontal: 14),
+      fillColor: const Color(0xFF333333),
+      contentPadding: const EdgeInsets.symmetric(vertical: 12, horizontal: 14),
       border: OutlineInputBorder(
         borderRadius: BorderRadius.circular(8),
-        borderSide: const BorderSide(color: Color(0xFF666666)), // --Neutral-700
+        borderSide: const BorderSide(color: Color(0xFF666666)),
       ),
       enabledBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(8),
@@ -144,6 +143,12 @@ class _AdminEditProfilePageState extends State<AdminEditProfilePage> {
         borderRadius: BorderRadius.circular(8),
         borderSide: const BorderSide(color: Color(0xFF2CAC5C), width: 2),
       ),
+      hintStyle: const TextStyle(color: Colors.white70),
+      floatingLabelStyle: const TextStyle(
+        color: Color(0xFF2CAC5C),
+        fontSize: 18,
+      ),
+      labelStyle: const TextStyle(color: Color.fromARGB(255, 182, 182, 182)),
     );
   }
 
@@ -269,10 +274,7 @@ class _AdminEditProfilePageState extends State<AdminEditProfilePage> {
                       ),
                     ),
                   ),
-                  const SizedBox(height: 32),
 
-                  // Buttons
-                  const Divider(color: Color(0xFF666666)),
                   const SizedBox(height: 24),
 
                   Flex(
@@ -315,7 +317,7 @@ class _AdminEditProfilePageState extends State<AdminEditProfilePage> {
                                   height: 20,
                                   width: 20,
                                   child: CircularProgressIndicator(
-                                    color: Colors.white,
+                                    color: Color(0xFF2CAC5C),
                                     strokeWidth: 2,
                                   ),
                                 )

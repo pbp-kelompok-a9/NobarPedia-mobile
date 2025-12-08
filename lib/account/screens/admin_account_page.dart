@@ -19,9 +19,9 @@ class _AdminAccountPage extends State<AdminAccountPage> {
 
     List<dynamic> temp = response['responseData'];
     // print(temp.map((item) => UserProfile.fromJson(item)));
-  
-  // Convert list of JSON objects -> List of UserProfile objects
-  return temp.map((item) => UserProfile.fromJson(item)).toList();
+
+    // Convert list of JSON objects -> List of UserProfile objects
+    return temp.map((item) => UserProfile.fromJson(item)).toList();
   }
 
   @override
@@ -55,23 +55,25 @@ class _AdminAccountPage extends State<AdminAccountPage> {
       ),
       drawer: LeftDrawer(),
       // Body halaman dengan padding di sekelilingnya.
-      backgroundColor: const Color(0xFF1E1E1E), 
+      backgroundColor: const Color(0xFF1E1E1E),
       body: FutureBuilder(
         future: fetchAllUser(request),
         builder: (context, AsyncSnapshot snapshot) {
           if (snapshot.data == null) {
-            return const Center(child: CircularProgressIndicator());
+            return const Center(
+              child: CircularProgressIndicator(color: Color(0xFF2CAC5C)),
+            );
           } else {
             return ListView.builder(
               padding: const EdgeInsets.only(top: 20),
               itemCount: snapshot.data!.length,
               itemBuilder: (_, index) {
                 return UserCard(
-                  userData: snapshot.data![index], 
+                  userData: snapshot.data![index],
                   request: request,
                   // Refresh page
                   onRefresh: () {
-                    setState(() {}); 
+                    setState(() {});
                   },
                 );
               },
