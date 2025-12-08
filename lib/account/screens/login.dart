@@ -69,30 +69,64 @@ class _LoginPageState extends State<LoginPage> {
                   const SizedBox(height: 30.0),
                   TextField(
                     controller: _usernameController,
-                    decoration: const InputDecoration(
+                    decoration: InputDecoration(
                       labelText: 'Username',
                       hintText: 'Enter your username',
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.all(Radius.circular(12.0)),
+                      contentPadding: const EdgeInsets.symmetric(
+                        vertical: 12,
+                        horizontal: 14,
                       ),
-                      contentPadding: EdgeInsets.symmetric(
-                        horizontal: 12.0,
-                        vertical: 8.0,
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(8),
+                        borderSide: const BorderSide(color: Color(0xFF666666)),
+                      ),
+                      enabledBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(8),
+                        borderSide: const BorderSide(color: Color(0xFF666666)),
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(8),
+                        borderSide: const BorderSide(
+                          color: Color(0xFF2CAC5C),
+                          width: 2,
+                        ),
+                      ),
+                      hintStyle: const TextStyle(color: Colors.white70),
+                      floatingLabelStyle: const TextStyle(
+                        color: Color(0xFF2CAC5C),
+                        fontSize: 18,
                       ),
                     ),
                   ),
                   const SizedBox(height: 12.0),
                   TextField(
                     controller: _passwordController,
-                    decoration: const InputDecoration(
+                    decoration: InputDecoration(
                       labelText: 'Password',
                       hintText: 'Enter your password',
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.all(Radius.circular(12.0)),
+                      contentPadding: const EdgeInsets.symmetric(
+                        vertical: 12,
+                        horizontal: 14,
                       ),
-                      contentPadding: EdgeInsets.symmetric(
-                        horizontal: 12.0,
-                        vertical: 8.0,
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(8),
+                        borderSide: const BorderSide(color: Color(0xFF666666)),
+                      ),
+                      enabledBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(8),
+                        borderSide: const BorderSide(color: Color(0xFF666666)),
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(8),
+                        borderSide: const BorderSide(
+                          color: Color(0xFF2CAC5C),
+                          width: 2,
+                        ),
+                      ),
+                      hintStyle: const TextStyle(color: Colors.white70),
+                      floatingLabelStyle: const TextStyle(
+                        color: Color(0xFF2CAC5C),
+                        fontSize: 18,
                       ),
                     ),
                     obscureText: true,
@@ -169,9 +203,12 @@ class _LoginPageState extends State<LoginPage> {
                     },
                     style: ElevatedButton.styleFrom(
                       foregroundColor: Colors.white,
+                      backgroundColor: const Color(0xFF2CAC5C),
                       minimumSize: Size(double.infinity, 50),
-                      backgroundColor: Theme.of(context).colorScheme.primary,
                       padding: const EdgeInsets.symmetric(vertical: 16.0),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(8),
+                      ),
                     ),
                     child: const Text('Sign In'),
                   ),
@@ -184,7 +221,7 @@ class _LoginPageState extends State<LoginPage> {
                         TextSpan(
                           text: "Register",
                           style: TextStyle(
-                            color: Theme.of(context).colorScheme.primary,
+                            color: const Color(0xFF2CAC5C),
                             fontWeight: FontWeight.bold,
                           ),
                           recognizer: TapGestureRecognizer()
@@ -216,7 +253,7 @@ class _LoginPageState extends State<LoginPage> {
                         TextSpan(
                           text: "Guest",
                           style: TextStyle(
-                            color: Theme.of(context).colorScheme.primary,
+                            color: const Color(0xFF2CAC5C),
                             fontWeight: FontWeight.bold,
                           ),
                           recognizer: TapGestureRecognizer()
