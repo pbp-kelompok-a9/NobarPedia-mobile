@@ -7,7 +7,7 @@ import 'package:nobarpedia_mobile/config.dart';
 class UserCard extends StatelessWidget {
   final UserProfile userData;
   final CookieRequest request;
-  final VoidCallback onRefresh; 
+  final VoidCallback onRefresh;
 
   const UserCard({
     super.key,
@@ -103,7 +103,10 @@ class UserCard extends StatelessWidget {
                 onPressed: () async {
                   Navigator.pushReplacement(
                     context,
-                    MaterialPageRoute(builder: (context) => AdminEditProfilePage(currentUser: userData))
+                    MaterialPageRoute(
+                      builder: (context) =>
+                          AdminEditProfilePage(currentUser: userData),
+                    ),
                   );
                 },
               ),
@@ -121,10 +124,13 @@ class UserCard extends StatelessWidget {
     );
   }
 
-  Future<void> _showDeleteConfirmation(BuildContext context, int userId) async {
+  Future<void> _showDeleteConfirmation(
+    BuildContext parentContext,
+    int userId,
+  ) async {
     return showDialog<void>(
-      context: context,
-      builder: (BuildContext context) {
+      context: parentContext,
+      builder: (BuildContext dialogContext) {
         return AlertDialog(
           backgroundColor: const Color(0xFF333333),
           title: const Text(
@@ -141,7 +147,7 @@ class UserCard extends StatelessWidget {
                 "Cancel",
                 style: TextStyle(color: Colors.white70),
               ),
-              onPressed: () => Navigator.of(context).pop(),
+              onPressed: () => Navigator.of(dialogContext).pop(),
             ),
             TextButton(
               child: const Text(
@@ -149,16 +155,16 @@ class UserCard extends StatelessWidget {
                 style: TextStyle(color: Colors.redAccent),
               ),
               onPressed: () async {
-                Navigator.of(context).pop(); // Close dialog
+                Navigator.of(dialogContext).pop(); // Close dialog
 
                 final response = await request.post(
                   "$baseUrl/account/api/delete_profile/$userId/",
                   {},
                 );
 
-                if (context.mounted) {
+                if (parentContext.mounted) {
                   if (response['status'] == true) {
-                    ScaffoldMessenger.of(context).showSnackBar(
+                    ScaffoldMessenger.of(parentContext).showSnackBar(
                       const SnackBar(
                         content: Text("Profile deleted"),
                         backgroundColor: Colors.green,
@@ -167,22 +173,13 @@ class UserCard extends StatelessWidget {
                     // Call the callback to refresh the list in the parent widget
                     onRefresh();
                   } else {
-                    ScaffoldMessenger.of(context).showSnackBar(
+                    ScaffoldMessenger.of(parentContext).showSnackBar(
                       SnackBar(
                         content: Text(response['message'] ?? "Error"),
                         backgroundColor: Colors.red,
                       ),
                     );
                   }
-                } else {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(
-                      content: Text(
-                        response['message'] ?? "Failed to delete account",
-                      ),
-                      backgroundColor: const Color(0xFFE53E3E),
-                    ),
-                  );
                 }
               },
             ),
