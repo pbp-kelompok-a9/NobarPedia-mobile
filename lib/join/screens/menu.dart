@@ -182,7 +182,9 @@ class _JoinPageState extends State<JoinPage> {
               future: fetchJoin(request),
               builder: (context, AsyncSnapshot snapshot) {
                 if (snapshot.data == null) {
-                  return const Center(child: CircularProgressIndicator());
+                  return const Center(
+                    child: CircularProgressIndicator(color: Color(0xFF2CAC5C)),
+                  );
                 } else {
                   if (!snapshot.hasData) {
                     return Column(

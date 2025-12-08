@@ -81,103 +81,103 @@ class _EditProfilePageState extends State<EditProfilePage> {
   }
 
   Future<void> _showDeleteConfirmation(BuildContext context) async {
-  return showDialog<void>(
-    context: context,
-    barrierDismissible: false, // User harus klik button biar ngeclose
-    builder: (BuildContext context) {
-      return AlertDialog(
-        backgroundColor: const Color(0xFF333333),
-        title: const Text(
-          'Delete Account',
-          style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
-        ),
-        content: const SingleChildScrollView(
-          child: ListBody(
-            children: <Widget>[
-              Text(
-                'Are you sure you want to delete your account?',
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: false, // User harus klik button biar ngeclose
+      builder: (BuildContext context) {
+        return AlertDialog(
+          backgroundColor: const Color(0xFF333333),
+          title: const Text(
+            'Delete Account',
+            style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+          ),
+          content: const SingleChildScrollView(
+            child: ListBody(
+              children: <Widget>[
+                Text(
+                  'Are you sure you want to delete your account?',
+                  style: TextStyle(color: Colors.white70),
+                ),
+                SizedBox(height: 10),
+                Text(
+                  'This action cannot be undone.',
+                  style: TextStyle(color: Colors.redAccent, fontSize: 13),
+                ),
+              ],
+            ),
+          ),
+          actions: <Widget>[
+            // Cancel Button
+            TextButton(
+              child: const Text(
+                'Cancel',
                 style: TextStyle(color: Colors.white70),
               ),
-              SizedBox(height: 10),
-              Text(
-                'This action cannot be undone.',
-                style: TextStyle(color: Colors.redAccent, fontSize: 13),
+              onPressed: () {
+                Navigator.of(context).pop(); // Close dialog
+              },
+            ),
+            // Delete Button
+            TextButton(
+              child: const Text(
+                'Delete',
+                style: TextStyle(
+                  color: Colors.redAccent,
+                  fontWeight: FontWeight.bold,
+                ),
               ),
-            ],
-          ),
-        ),
-        actions: <Widget>[
-          // Cancel Button
-          TextButton(
-            child: const Text(
-              'Cancel',
-              style: TextStyle(color: Colors.white70),
-            ),
-            onPressed: () {
-              Navigator.of(context).pop(); // Close dialog
-            },
-          ),
-          // Delete Button
-          TextButton(
-            child: const Text(
-              'Delete',
-              style: TextStyle(color: Colors.redAccent, fontWeight: FontWeight.bold),
-            ),
-            onPressed: () {
-              Navigator.of(context).pop(); 
-              
-              _performDeleteAccount(); 
-            },
-          ),
-        ],
-      );
-    },
-  );
-}
+              onPressed: () {
+                Navigator.of(context).pop();
 
-Future<void> _performDeleteAccount() async {
-  final request = context.read<CookieRequest>();
-
-  try {
-    final response = await request.post(
-      "$baseUrl/account/api/delete_profile/${widget.id}/", 
-      {}, 
+                _performDeleteAccount();
+              },
+            ),
+          ],
+        );
+      },
     );
+  }
 
-    if (!context.mounted) return;
+  Future<void> _performDeleteAccount() async {
+    final request = context.read<CookieRequest>();
 
-    if (response['status'] == true) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text("Account deleted successfully."),
-        ),
+    try {
+      final response = await request.post(
+        "$baseUrl/account/api/delete_profile/${widget.id}/",
+        {},
       );
-      
-      Navigator.pushAndRemoveUntil(
-        context,
-        MaterialPageRoute(builder: (context) => const LoginPage()), 
-        (route) => false,
-      );
-      
-    } else {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(response['message'] ?? "Failed to delete account"),
-          backgroundColor: const Color(0xFFE53E3E),
-        ),
-      );
-    }
-  } catch (e) {
-    if (context.mounted) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text("Error on delete_profile: $e"),
-          backgroundColor: const Color(0xFFE53E3E),
-        ),
-      );
+
+      if (!context.mounted) return;
+
+      if (response['status'] == true) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text("Account deleted successfully.")),
+        );
+
+        Navigator.pushAndRemoveUntil(
+          context,
+          MaterialPageRoute(builder: (context) => const LoginPage()),
+          (route) => false,
+        );
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(response['message'] ?? "Failed to delete account"),
+            backgroundColor: const Color(0xFFE53E3E),
+          ),
+        );
+      }
+    } catch (e) {
+      if (context.mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text("Error on delete_profile: $e"),
+            backgroundColor: const Color(0xFFE53E3E),
+          ),
+        );
+      }
     }
   }
-}
 
   Widget errorBox() {
     if (errors == null) return const SizedBox.shrink();
@@ -207,8 +207,10 @@ Future<void> _performDeleteAccount() async {
     );
   }
 
-  InputDecoration webInputStyle() {
+  InputDecoration webInputStyle(String? labelInput, String? hintInput) {
     return InputDecoration(
+      labelText: labelInput,
+      hintText: hintInput,
       filled: true,
       fillColor: const Color(0xFF333333),
       contentPadding: const EdgeInsets.symmetric(vertical: 12, horizontal: 14),
@@ -225,6 +227,11 @@ Future<void> _performDeleteAccount() async {
         borderSide: const BorderSide(color: Color(0xFF2CAC5C), width: 2),
       ),
       hintStyle: const TextStyle(color: Colors.white70),
+      floatingLabelStyle: const TextStyle(
+        color: Color(0xFF2CAC5C),
+        fontSize: 18,
+      ),
+      labelStyle: const TextStyle(color: Color.fromARGB(255, 182, 182, 182)),
     );
   }
 
@@ -320,47 +327,48 @@ Future<void> _performDeleteAccount() async {
                 const SizedBox(height: 8),
 
                 // Username
-                const Text("Username", style: TextStyle(color: Colors.white)),
+                // const Text("Username", style: TextStyle(color: Colors.white)),
                 const SizedBox(height: 6),
                 TextField(
                   controller: usernameController,
                   style: const TextStyle(color: Colors.white),
-                  decoration: webInputStyle(),
+                  decoration: webInputStyle("Username", "Enter your username"),
                 ),
                 const SizedBox(height: 16),
 
                 // Email
-                const Text("Email", style: TextStyle(color: Colors.white)),
                 const SizedBox(height: 6),
                 TextField(
                   controller: emailController,
                   style: const TextStyle(color: Colors.white),
-                  decoration: webInputStyle(),
+                  decoration: webInputStyle("Email", "Enter your email"),
                 ),
                 const SizedBox(height: 16),
 
                 // Fullname
-                const Text("Full Name", style: TextStyle(color: Colors.white)),
+                // const Text("Full Name", style: TextStyle(color: Colors.white)),
                 const SizedBox(height: 6),
                 TextField(
                   controller: fullnameController,
                   style: const TextStyle(color: Colors.white),
-                  decoration: webInputStyle(),
+                  decoration: webInputStyle(
+                    "Full Name",
+                    "Enter your full name",
+                  ),
                 ),
                 const SizedBox(height: 16),
 
                 // Bio
-                const Text("Bio", style: TextStyle(color: Colors.white)),
+                // const Text("Bio", style: TextStyle(color: Colors.white)),
                 const SizedBox(height: 6),
                 TextField(
                   controller: bioController,
                   maxLines: 4,
                   style: const TextStyle(color: Colors.white),
-                  decoration: webInputStyle(),
+                  decoration: webInputStyle("Bio", "Enter your bio"),
                 ),
 
                 const SizedBox(height: 24),
-                const Divider(color: Colors.grey),
 
                 Row(
                   children: [
@@ -374,36 +382,48 @@ Future<void> _performDeleteAccount() async {
                 const Divider(color: Colors.grey),
                 const SizedBox(height: 16),
 
-                OutlinedButton(
-                  onPressed: () => Navigator.pushReplacement(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => ChangePasswordPage(profile:widget.profile, id: widget.id),
+                Row(
+                  children: [
+                    Expanded(
+                      child: OutlinedButton(
+                        onPressed: () => Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => ChangePasswordPage(
+                              profile: widget.profile,
+                              id: widget.id,
+                            ),
+                          ),
+                        ),
+                        style: OutlinedButton.styleFrom(
+                          side: const BorderSide(color: Color(0xFFD69E2E)),
+                          foregroundColor: const Color(0xFF333333),
+                          backgroundColor: const Color(0xFFF6E05E),
+                          padding: const EdgeInsets.symmetric(vertical: 12),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                        ),
+                        child: const Text("Change Password"),
+                      ),
                     ),
-                  ),
-                  style: OutlinedButton.styleFrom(
-                    side: const BorderSide(color: Color(0xFFD69E2E)),
-                    backgroundColor: const Color(0xFF333333),
-                    foregroundColor: const Color(0xFFF6E05E),
-                    padding: const EdgeInsets.symmetric(vertical: 12),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(8),
+                    const SizedBox(width: 12),
+                    Expanded(
+                      child: OutlinedButton(
+                        onPressed: () => _showDeleteConfirmation(context),
+                        style: OutlinedButton.styleFrom(
+                          side: const BorderSide(color: Color(0xFFE53E3E)),
+                          foregroundColor: const Color(0xFF333333),
+                          backgroundColor: const Color(0xFFF56565),
+                          padding: const EdgeInsets.symmetric(vertical: 12),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                        ),
+                        child: const Text("Delete Account"),
+                      ),
                     ),
-                  ),
-                  child: const Text("Change Password"),
-                ),
-                OutlinedButton(
-                  onPressed: () => _showDeleteConfirmation(context),
-                  style: OutlinedButton.styleFrom(
-                    side: const BorderSide(color: Color(0xFFE53E3E)),
-                    backgroundColor: const Color(0xFF333333),
-                    foregroundColor: const Color(0xFFF56565),
-                    padding: const EdgeInsets.symmetric(vertical: 12),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(8),
-                    ),
-                  ),
-                  child: const Text("Delete Account"),
+                  ],
                 ),
               ],
             ),

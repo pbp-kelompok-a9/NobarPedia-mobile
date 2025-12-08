@@ -39,7 +39,7 @@ class _ProfilePageState extends State<ProfilePage> {
         builder: (context, snapshot) {
           if (!snapshot.hasData) {
             return const Center(
-              child: CircularProgressIndicator(color: Colors.white),
+              child: CircularProgressIndicator(color: Color(0xFF2CAC5C)),
             );
           }
 
