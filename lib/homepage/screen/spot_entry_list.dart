@@ -59,7 +59,14 @@ class _SpotEntryListPageState extends State<SpotEntryListPage> {
                 ],
               );
             } else {
-              return ListView.builder(
+              return GridView.builder(
+                padding: const EdgeInsets.all(12),
+                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: 2,     
+                  crossAxisSpacing: 12,
+                  mainAxisSpacing: 12,
+                  childAspectRatio: 0.75, 
+                ),
                 itemCount: snapshot.data!.length,
                 itemBuilder: (_, index) => SpotEntryCard(
                   spot: snapshot.data![index],

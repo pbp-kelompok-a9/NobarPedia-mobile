@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import '../models/spot_entry.dart';
 import 'package:nobarpedia_mobile/config.dart';
+import 'package:pbp_django_auth/pbp_django_auth.dart';
+import 'package:provider/provider.dart';
 
 class SpotEntryCard extends StatelessWidget {
   final SpotEntry spot;
@@ -21,8 +23,9 @@ class SpotEntryCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final request = context.watch<CookieRequest>();
     return Container(
-      margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+      margin: const EdgeInsets.symmetric(horizontal: 4, vertical: 4),
       child: InkWell(
         onTap: onTap,
         child: Card(
@@ -38,20 +41,25 @@ class SpotEntryCard extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
+
                 // Thumbnail
                 ClipRRect(
                   borderRadius: BorderRadius.circular(6),
-                  child: Image.network(
-                    '$baseUrl/proxy-image/?url=${Uri.encodeComponent(spot.thumbnail)}',
-                    height: 180,
-                    width: double.infinity,
-                    fit: BoxFit.cover,
-                    errorBuilder: (context, error, stackTrace) => Container(
-                      height: 180,
-                      color: Colors.grey[300],
-                      child: const Center(child: Icon(Icons.broken_image)),
+                  child: AspectRatio(
+                    aspectRatio: 16/9,
+                    child: Image.network(
+                      '$baseUrl/proxy-image/?url=${Uri.encodeComponent(spot.thumbnail)}',
+                      height: 94,
+                      width: double.infinity,
+                      fit: BoxFit.cover,
+                      errorBuilder: (context, error, stackTrace) => Container(
+                        height: 94,
+                        color: Colors.grey[300],
+                        child: const Center(child: Icon(Icons.broken_image)),
+                      ),
                     ),
                   ),
+                  
                 ),
                 const SizedBox(height: 8),
 
@@ -64,7 +72,7 @@ class SpotEntryCard extends StatelessWidget {
                   child: Text(
                     "${spot.homeTeam} vs ${spot.awayTeam}",
                     style: const TextStyle(
-                      fontSize: 12,
+                      fontSize: 10,
                       color: Colors.green,
                       fontWeight: FontWeight.w500,
                     ),
@@ -76,19 +84,21 @@ class SpotEntryCard extends StatelessWidget {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
+                    // === Nama tempat ===
                     Flexible(child: Text(
                       spot.name,
                       style: const TextStyle(
-                        fontSize: 18.0,
+                        fontSize: 12.0,
                         fontWeight: FontWeight.bold,
                         color: Colors.black,
                       )
                     )),
 
+                    // === Tanggal dan waktu ===
                     Text(
                       "${formatDate(spot.date)} | ${spot.time.substring(0,5)}",
                       style: const TextStyle(
-                        fontSize: 14,
+                        fontSize: 10,
                         fontWeight: FontWeight.normal,
                         color:Colors.black,
                       ),
@@ -126,26 +136,29 @@ class SpotEntryCard extends StatelessWidget {
                           padding: const EdgeInsets.symmetric(vertical: 12),
                         ),
                         child: const Text(
-                          "Join",
+                          "Detail",
                           style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                         ),
                       ),
                     ),
 
-                    const SizedBox(width: 16),
-                    IconButton(
-                      onPressed: () {
-                        // Aksi edit
-                      },
-                      icon: const Icon(Icons.edit, color: Colors.green, size: 26),
-                    ),
+                    if (request.loggedIn) ...[
+                      const SizedBox(width: 16),
+                      IconButton(
+                        onPressed: () {
+                          // Aksi edit
+                        },
+                        icon: const Icon(Icons.edit, color: Colors.green, size: 26),
+                      ),
 
-                    IconButton(
-                      onPressed: () {
-                        // Aksi delete
-                      },
-                      icon: const Icon(Icons.delete, color: Colors.red, size: 26),
-                    ),
+                      IconButton(
+                        onPressed: () {
+                          // Aksi delete
+                        },
+                        icon: const Icon(Icons.delete, color: Colors.red, size: 26),
+                      ),
+                    ],
+                    
                   ],
                 )
 

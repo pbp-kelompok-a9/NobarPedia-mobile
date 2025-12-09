@@ -32,6 +32,8 @@ class MyHomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final request = context.watch<CookieRequest>();
+
     // Scaffold menyediakan struktur dasar halaman dengan AppBar dan body.
     return Scaffold(
       // AppBar adalah bagian atas halaman yang menampilkan judul.
@@ -54,53 +56,38 @@ class MyHomePage extends StatelessWidget {
       drawer: LeftDrawer(),
       // Body halaman dengan padding di sekelilingnya.
       body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        // Menyusun widget secara vertikal dalam sebuah kolom.
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
+        padding: const EdgeInsets.all(4.0),
+        child: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
 
-            Column(
-              children: [
-                // ClipRRect(
-                //   borderRadius: BorderRadius.circular(12),
-                //   child: Image.asset(
-                //     '', //path gambar
-                //     height: 160,
-                //     width: double.infinity,
-                //     fit: BoxFit.cover,
-                //   ),
-                // ),
-
-                const SizedBox(height: 20),
-
-                const Text(
-                  "Welcome to NobarPedia",
-                  style: TextStyle(
-                    fontSize: 22,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.white,
-                  ),
-                  textAlign: TextAlign.center,
+              // ==== Bagian Header ====
+              const SizedBox(height: 20),
+              const Text(
+                "Welcome to NobarPedia",
+                style: TextStyle(
+                  fontSize: 22,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.white,
                 ),
+                textAlign: TextAlign.center,
+              ),
+              const SizedBox(height: 10),
+              const Text(
+                "Temukan tempat nobar terbaik di sekitarmu. Gabung komunitas sesama pecinta bola dan rasakan atmosfer pertandingan bersama!",
+                style: TextStyle(fontSize: 14, color: Colors.white70),
+                textAlign: TextAlign.center,
+              ),
+              const SizedBox(height: 16),
 
-                const SizedBox(height: 10),
-
-                const Text(
-                  "Temukan tempat nobar terbaik di sekitarmu. Gabung komunitas sesama pecinta bola dan rasakan atmosfer pertandingan bersama!",
-                  style: TextStyle(
-                    fontSize: 14,
-                    color: Colors.white70,
-                  ),
-                  textAlign: TextAlign.center,
-                ),
-
-                const SizedBox(height: 16),
-
+              if (request.loggedIn) ...[
                 ElevatedButton(
                   onPressed: () {
-                    Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => const SpotFormPage()));
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => const SpotFormPage()),
+                    );
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.green,
@@ -109,25 +96,35 @@ class MyHomePage extends StatelessWidget {
                       borderRadius: BorderRadius.circular(8),
                     ),
                   ),
-                  child: const Text("Add New Spot",
-                          style: TextStyle(
-                            color:Colors.white
-                          ),),
+                  child: const Text("Add New Spot", style: TextStyle(color: Colors.white)),
                 ),
 
-                const SizedBox(height: 60),
+                const SizedBox(height: 40),
+              
+              ],
 
-                const Text(
-                  "Pick Your Spot",
-                  style: TextStyle(
-                    fontSize: 20,
-                    color: Colors.white,
+              // ==== Gambar ====
+              ClipRRect(
+                borderRadius: BorderRadius.circular(12),
+                child: SizedBox(
+                  width: double.infinity,
+                  child: Image.asset(
+                    'assets/images/homepage_image.png',
+                    fit: BoxFit.cover,
                   ),
-                  textAlign: TextAlign.center,
                 ),
+              ),
 
-                const SizedBox(height: 20),
+              const SizedBox(height: 20),
 
+              const Text(
+                "Pick Your Spot",
+                style: TextStyle(fontSize: 20, color: Colors.white),
+              ),
+              const SizedBox(height: 20),
+
+              // ==== Tombol Filter ====
+              if (request.loggedIn) ...[
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
@@ -137,32 +134,26 @@ class MyHomePage extends StatelessWidget {
                         backgroundColor: Colors.green,
                         padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
                       ),
-                      child: const Text("All Spot",
-                        style: TextStyle(color: Colors.white),),
+                      child: const Text("All Spot", style: TextStyle(color: Colors.white)),
                     ),
                     const SizedBox(width: 10),
-
                     OutlinedButton(
                       onPressed: () {},
                       style: OutlinedButton.styleFrom(
                         side: const BorderSide(color: Colors.green),
                         padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
                       ),
-                      child: const Text("Your Spot",
-                            style: TextStyle(color: Colors.white),),
+                      child: const Text("Your Spot", style: TextStyle(color: Colors.white)),
                     ),
                   ],
                 ),
 
-                const SizedBox(height: 8),
-
-
-
+                const SizedBox(height: 20),
               ],
-            ),
+      
 
-            Expanded(
-              child: FutureBuilder(
+              // ==== LIST SPOT ====
+              FutureBuilder(
                 future: fetchSpot(context.watch<CookieRequest>()),
                 builder: (context, AsyncSnapshot snapshot) {
                   if (snapshot.connectionState == ConnectionState.waiting) {
@@ -175,14 +166,25 @@ class MyHomePage extends StatelessWidget {
                     );
                   }
 
-                  return ListView.builder(
+                  return GridView.builder(
+                    shrinkWrap: true,        
+                    physics: NeverScrollableScrollPhysics(),
+                    gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
+                      maxCrossAxisExtent: 350, 
+                      mainAxisSpacing: 8,
+                      crossAxisSpacing: 8,
+                      childAspectRatio: 0.75, 
+                    ),
+
                     itemCount: snapshot.data.length,
                     itemBuilder: (_, index) => SpotEntryCard(
                       spot: snapshot.data[index],
                       onTap: () {
                         ScaffoldMessenger.of(context).showSnackBar(
                           SnackBar(
-                            content:Text("You clicked on ${snapshot.data![index].name}"),
+                            content: Text(
+                              "You clicked on ${snapshot.data![index].name}",
+                            ),
                           ),
                         );
                       },
@@ -190,12 +192,12 @@ class MyHomePage extends StatelessWidget {
                   );
                 },
               ),
-            )
 
-          ],
-          
+            ],
+          ),
         ),
       ),
+
     );
   }
 }

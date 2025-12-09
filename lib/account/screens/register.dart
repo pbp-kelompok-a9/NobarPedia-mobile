@@ -1,6 +1,8 @@
 import 'dart:convert';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:nobarpedia_mobile/account/screens/login.dart';
+import 'package:nobarpedia_mobile/homepage/screen/menu.dart';
 import 'package:pbp_django_auth/pbp_django_auth.dart';
 import 'package:provider/provider.dart';
 import 'package:nobarpedia_mobile/config.dart';
@@ -22,12 +24,6 @@ class _RegisterPageState extends State<RegisterPage> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Register'),
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back),
-          onPressed: () {
-            Navigator.pop(context);
-          },
-        ),
       ),
       body: Center(
         child: SingleChildScrollView(
@@ -52,15 +48,32 @@ class _RegisterPageState extends State<RegisterPage> {
                   const SizedBox(height: 30.0),
                   TextFormField(
                     controller: _usernameController,
-                    decoration: const InputDecoration(
+                    decoration: InputDecoration(
                       labelText: 'Username',
                       hintText: 'Enter your username',
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.all(Radius.circular(12.0)),
+                      contentPadding: const EdgeInsets.symmetric(
+                        vertical: 12,
+                        horizontal: 14,
                       ),
-                      contentPadding: EdgeInsets.symmetric(
-                        horizontal: 12.0,
-                        vertical: 8.0,
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(8),
+                        borderSide: const BorderSide(color: Color(0xFF666666)),
+                      ),
+                      enabledBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(8),
+                        borderSide: const BorderSide(color: Color(0xFF666666)),
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(8),
+                        borderSide: const BorderSide(
+                          color: Color(0xFF2CAC5C),
+                          width: 2,
+                        ),
+                      ),
+                      hintStyle: const TextStyle(color: Colors.white70),
+                      floatingLabelStyle: const TextStyle(
+                        color: Color(0xFF2CAC5C),
+                        fontSize: 18,
                       ),
                     ),
                     validator: (value) {
@@ -73,15 +86,32 @@ class _RegisterPageState extends State<RegisterPage> {
                   const SizedBox(height: 12.0),
                   TextFormField(
                     controller: _passwordController,
-                    decoration: const InputDecoration(
+                    decoration: InputDecoration(
                       labelText: 'Password',
                       hintText: 'Enter your password',
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.all(Radius.circular(12.0)),
+                      contentPadding: const EdgeInsets.symmetric(
+                        vertical: 12,
+                        horizontal: 14,
                       ),
-                      contentPadding: EdgeInsets.symmetric(
-                        horizontal: 12.0,
-                        vertical: 8.0,
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(8),
+                        borderSide: const BorderSide(color: Color(0xFF666666)),
+                      ),
+                      enabledBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(8),
+                        borderSide: const BorderSide(color: Color(0xFF666666)),
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(8),
+                        borderSide: const BorderSide(
+                          color: Color(0xFF2CAC5C),
+                          width: 2,
+                        ),
+                      ),
+                      hintStyle: const TextStyle(color: Colors.white70),
+                      floatingLabelStyle: const TextStyle(
+                        color: Color(0xFF2CAC5C),
+                        fontSize: 18,
                       ),
                     ),
                     obscureText: true,
@@ -95,15 +125,32 @@ class _RegisterPageState extends State<RegisterPage> {
                   const SizedBox(height: 12.0),
                   TextFormField(
                     controller: _confirmPasswordController,
-                    decoration: const InputDecoration(
+                    decoration: InputDecoration(
                       labelText: 'Confirm Password',
                       hintText: 'Confirm your password',
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.all(Radius.circular(12.0)),
+                      contentPadding: const EdgeInsets.symmetric(
+                        vertical: 12,
+                        horizontal: 14,
                       ),
-                      contentPadding: EdgeInsets.symmetric(
-                        horizontal: 12.0,
-                        vertical: 8.0,
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(8),
+                        borderSide: const BorderSide(color: Color(0xFF666666)),
+                      ),
+                      enabledBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(8),
+                        borderSide: const BorderSide(color: Color(0xFF666666)),
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(8),
+                        borderSide: const BorderSide(
+                          color: Color(0xFF2CAC5C),
+                          width: 2,
+                        ),
+                      ),
+                      hintStyle: const TextStyle(color: Colors.white70),
+                      floatingLabelStyle: const TextStyle(
+                        color: Color(0xFF2CAC5C),
+                        fontSize: 18,
                       ),
                     ),
                     obscureText: true,
@@ -126,7 +173,7 @@ class _RegisterPageState extends State<RegisterPage> {
                       // To connect Android emulator with Django on localhost, use URL http://10.0.2.2/
                       // If you using chrome,  use URL http://localhost:8000
                       final response = await request.postJson(
-                        "$baseUrl/auth/register/",
+                        "$baseUrl/account/api/register/",
                         jsonEncode({
                           "username": username,
                           "password1": password1,
@@ -157,11 +204,71 @@ class _RegisterPageState extends State<RegisterPage> {
                     },
                     style: ElevatedButton.styleFrom(
                       foregroundColor: Colors.white,
+                      backgroundColor: const Color(0xFF2CAC5C),
                       minimumSize: Size(double.infinity, 50),
-                      backgroundColor: Theme.of(context).colorScheme.primary,
                       padding: const EdgeInsets.symmetric(vertical: 16.0),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(8),
+                      ),
                     ),
                     child: const Text('Register'),
+                  ),
+                  const SizedBox(height: 36.0),
+                  RichText(
+                    text: TextSpan(
+                      style: TextStyle(color: Colors.white, fontSize: 16.0),
+                      children: [
+                        const TextSpan(text: "Already have an account? "),
+                        TextSpan(
+                          text: "Sign In",
+                          style: TextStyle(
+                            color: const Color(0xFF2CAC5C),
+                            fontWeight: FontWeight.bold,
+                          ),
+                          recognizer: TapGestureRecognizer()
+                            ..onTap = () {
+                              Navigator.pushReplacement(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => const LoginPage(),
+                                ),
+                              );
+                            },
+                        ),
+                      ],
+                    ),
+                  ),
+                  const SizedBox(height: 10.0),
+                  RichText(
+                    text: TextSpan(
+                      style: TextStyle(color: Colors.white, fontSize: 16.0),
+                      children: [ const TextSpan(text: "Or") ],
+                    ),
+                  ),
+                  const SizedBox(height: 10.0),
+                  RichText(
+                    text: TextSpan(
+                      style: TextStyle(color: Colors.white, fontSize: 16.0),
+                      children: [
+                        const TextSpan(text: "Continue as "),
+                        TextSpan(
+                          text: "Guest",
+                          style: TextStyle(
+                            color: const Color(0xFF2CAC5C),
+                            fontWeight: FontWeight.bold,
+                          ),
+                          recognizer: TapGestureRecognizer()
+                            ..onTap = () {
+                              Navigator.pushReplacement(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => MyHomePage(),
+                                ),
+                              );
+                            },
+                        ),
+                      ],
+                    ),
                   ),
                 ],
               ),
