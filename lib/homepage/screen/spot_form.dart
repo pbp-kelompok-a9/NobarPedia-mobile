@@ -157,6 +157,60 @@ class _SpotFormPageState extends State<SpotFormPage> {
                     ),
                   ),
 
+                  // === City ===
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: TextFormField(
+                      decoration: InputDecoration(
+                        hintText: "City",
+                        labelText: "City",
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(5.0),
+                        ),
+                      ),
+                      onChanged: (String? value) {
+                        setState(() {
+                          _city = value!;
+                        });
+                      },
+                      validator: (String? value) {
+                        if (value == null || value.isEmpty) {
+                          return "City tidak boleh kosong!";
+                        }
+                        return null;
+                      },
+                    ),
+                  ),
+
+                  // === Date ===
+                  
+                  // === Time ===
+                
+                  // === Address ===
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: TextFormField(
+                      maxLines: 5,
+                      decoration: InputDecoration(
+                        hintText: "Address",
+                        labelText: "Address",
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(5.0),
+                        ),
+                      ),
+                      onChanged: (String? value) {
+                        setState(() {
+                          _address = value!;
+                        });
+                      },
+                      validator: (String? value) {
+                        if (value == null || value.isEmpty) {
+                          return "Address tidak boleh kosong!";
+                        }
+                        return null;
+                      },
+                    ),
+                  ),
 
                   // === Tombol Simpan ===
                   Align(

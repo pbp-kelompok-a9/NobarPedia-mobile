@@ -14,8 +14,8 @@ class SpotEntry {
     String thumbnail;
     String homeTeam;
     String awayTeam;
-    DateTime date;
-    String time;
+    DateTime date; //
+    String time; //
     String city;
     String address;
     int host;
