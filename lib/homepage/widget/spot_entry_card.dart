@@ -125,7 +125,7 @@ class SpotEntryCard extends StatelessWidget {
                     Expanded(
                       child: ElevatedButton(
                         onPressed: () {
-                          // Aksi join
+                          // ke page detail
                         },
                         style: ElevatedButton.styleFrom(
                           backgroundColor: Colors.green,
@@ -137,7 +137,7 @@ class SpotEntryCard extends StatelessWidget {
                         ),
                         child: const Text(
                           "Detail",
-                          style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                          style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
                         ),
                       ),
                     ),

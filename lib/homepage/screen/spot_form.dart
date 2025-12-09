@@ -13,6 +13,8 @@ class SpotFormPage extends StatefulWidget {
     State<SpotFormPage> createState() => _SpotFormPageState();
 }
 
+
+
 class _SpotFormPageState extends State<SpotFormPage> {
   final _formKey = GlobalKey<FormState>();
 
@@ -25,6 +27,34 @@ class _SpotFormPageState extends State<SpotFormPage> {
   String _city = "";
   String _address = "";
 
+  Future<void> _selectDate(BuildContext context) async {
+    final DateTime? picked = await showDatePicker(
+      context: context,
+      initialDate: _date,
+      firstDate: DateTime(2000),
+      lastDate: DateTime(2101),
+    );
+    if (picked != null && picked != _date) {
+      setState(() {
+        _date = picked;
+      });
+    }
+  }
+
+  Future<void> _selectTime(BuildContext context) async {
+    final TimeOfDay? picked = await showTimePicker(
+      context: context,
+      initialTime: TimeOfDay.now(),
+    );
+    if (picked != null) {
+      setState(() {
+        final hour = picked.hour.toString().padLeft(2, '0');
+        final minute = picked.minute.toString().padLeft(2, '0');
+        _time = "$hour:$minute:00";
+      });
+    }
+  }
+
     @override
     Widget build(BuildContext context) {
         final request = context.watch<CookieRequest>();
@@ -35,8 +65,6 @@ class _SpotFormPageState extends State<SpotFormPage> {
                 'Add Nobar Spot Form',
               ),
             ),
-            backgroundColor: const Color.fromARGB(255, 31, 123, 53),
-            foregroundColor: Colors.white,
           ),
           drawer: LeftDrawer(),
           body : Form(
@@ -183,8 +211,59 @@ class _SpotFormPageState extends State<SpotFormPage> {
                   ),
 
                   // === Date ===
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: InkWell(
+                      onTap: () => _selectDate(context),
+                      child: InputDecorator(
+                        decoration: InputDecoration(
+                          labelText: "Date",
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(5.0),
+                          ),
+                        ),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              "${_date.day.toString().padLeft(2, '0')}-${_date.month.toString().padLeft(2, '0')}-${_date.year}",
+                              style: const TextStyle(fontSize: 16),
+                            ),
+                            const Icon(Icons.calendar_today),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
                   
                   // === Time ===
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: InkWell(
+                      onTap: () => _selectTime(context),
+                      child: InputDecorator(
+                        decoration: InputDecoration(
+                          labelText: "Time",
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(5.0),
+                          ),
+                        ),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              _time.isEmpty ? "Select Time" : _time.substring(0, 5),
+                              style: TextStyle(
+                                fontSize: 16,
+                                color: Colors.white,
+                              ),
+                            ),
+                            const Icon(Icons.access_time),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
                 
                   // === Address ===
                   Padding(
@@ -227,7 +306,12 @@ class _SpotFormPageState extends State<SpotFormPage> {
                              // TODO: Replace the URL with your app's URL
                               // To connect Android emulator with Django on localhost, use URL http://10.0.2.2/
                               // If you using chrome,  use URL http://localhost:8000
-                              
+
+                              print("Is logged in: ${request.loggedIn}");
+                              print("Cookies: ${request.cookies}");
+
+                              String formattedDate = "${_date.year.toString().padLeft(4, '0')}-${_date.month.toString().padLeft(2, '0')}-${_date.day.toString().padLeft(2, '0')}";
+
                               final response = await request.postJson(
                                 "$baseUrl/create-spot-flutter/",
                                 jsonEncode({
@@ -235,12 +319,14 @@ class _SpotFormPageState extends State<SpotFormPage> {
                                   "home_team": _home_team,
                                   "away_team":_away_team,
                                   "thumbnail": _thumbnail,
-                                  "date" : _date,
+                                  "date" : formattedDate,
                                   "time": _time,
                                   "city" : _city,
                                   "address" : _address,
+                                  "username": request.jsonData['username'],
                                 }),
                               );
+                              print("Response: $response");
                               if (context.mounted) {
                                 if (response['status'] == 'success') {
                                   ScaffoldMessenger.of(context)
