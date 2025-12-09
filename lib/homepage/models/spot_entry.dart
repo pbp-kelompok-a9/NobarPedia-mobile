@@ -19,6 +19,7 @@ class SpotEntry {
     String city;
     String address;
     int host;
+    String? hostUsername;
 
     SpotEntry({
         required this.id,
@@ -31,6 +32,7 @@ class SpotEntry {
         required this.city,
         required this.address,
         required this.host,
+        this.hostUsername,
     });
 
     factory SpotEntry.fromJson(Map<String, dynamic> json) => SpotEntry(
@@ -44,6 +46,7 @@ class SpotEntry {
         city: json["city"],
         address: json["address"],
         host: json["host"],
+        hostUsername: json["host_username"],
     );
 
     Map<String, dynamic> toJson() => {
@@ -57,5 +60,6 @@ class SpotEntry {
         "city": city,
         "address": address,
         "host": host,
+        "host_username": hostUsername,
     };
 }

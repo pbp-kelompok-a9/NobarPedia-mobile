@@ -3,15 +3,18 @@ import '../models/spot_entry.dart';
 import 'package:nobarpedia_mobile/config.dart';
 import 'package:pbp_django_auth/pbp_django_auth.dart';
 import 'package:provider/provider.dart';
+import 'dart:convert';
 
 class SpotEntryCard extends StatelessWidget {
   final SpotEntry spot;
   final VoidCallback onTap;
-
+  final Future<void> Function()? onDelete;
+  
   const SpotEntryCard({
     super.key,
     required this.spot,
     required this.onTap,
+    this.onDelete,
   });
 
   String formatDate(DateTime date) {
@@ -19,11 +22,82 @@ class SpotEntryCard extends StatelessWidget {
     return "${date.day} ${months[date.month - 1]}";
   }
 
+  Future<void> _deleteSpot(BuildContext context, CookieRequest request) async {
+    // Konfirmasi delete
+    final confirmed = await showDialog<bool>(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Delete Spot'),
+          content: Text('Are you sure you want to delete "${spot.name}"?'),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.of(context).pop(false),
+              child: const Text('Cancel'),
+            ),
+            TextButton(
+              onPressed: () => Navigator.of(context).pop(true),
+              style: TextButton.styleFrom(foregroundColor: Colors.red),
+              child: const Text('Delete'),
+            ),
+          ],
+        );
+      },
+    );
+
+    if (confirmed != true) return;
+
+    try {
+      final response = await request.postJson(
+        "$baseUrl/delete-spot-flutter/${spot.id}/",
+        jsonEncode({
+          "username": request.jsonData['username'],
+        }),
+      );
+
+      if (context.mounted) {
+        if (response['status'] == 'success') {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text("Spot deleted successfully!"),
+              backgroundColor: Colors.green,
+            ),
+          );
+          // Panggil callback untuk refresh list
+          if (onDelete != null) {
+            await onDelete!();
+          }
+        } else {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text(response['message'] ?? "Failed to delete spot"),
+              backgroundColor: Colors.red,
+            ),
+          );
+        }
+      }
+    } catch (e) {
+      if (context.mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text("Error: ${e.toString()}"),
+            backgroundColor: Colors.red,
+          ),
+        );
+      }
+    }
+  }
 
 
   @override
   Widget build(BuildContext context) {
     final request = context.watch<CookieRequest>();
+
+    final currentUsername = request.jsonData['username'];
+    final isOwner = request.loggedIn && 
+                    currentUsername != null && 
+                    currentUsername == spot.hostUsername;
+
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 4, vertical: 4),
       child: InkWell(
@@ -142,7 +216,7 @@ class SpotEntryCard extends StatelessWidget {
                       ),
                     ),
 
-                    if (request.loggedIn) ...[
+                    if (isOwner) ...[
                       const SizedBox(width: 16),
                       IconButton(
                         onPressed: () {
@@ -152,9 +226,8 @@ class SpotEntryCard extends StatelessWidget {
                       ),
 
                       IconButton(
-                        onPressed: () {
-                          // Aksi delete
-                        },
+                        // Aksi delete
+                        onPressed: () => _deleteSpot(context, request),
                         icon: const Icon(Icons.delete, color: Colors.red, size: 26),
                       ),
                     ],

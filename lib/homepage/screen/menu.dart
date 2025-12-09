@@ -6,21 +6,35 @@ import 'package:pbp_django_auth/pbp_django_auth.dart';
 import 'package:provider/provider.dart';
 import 'package:nobarpedia_mobile/config.dart';
 import 'spot_form.dart';
-// import 'package:nobarpedia_mobile/widgets/product_card.dart';
 
-class MyHomePage extends StatelessWidget {
-  MyHomePage({super.key});
+class MyHomePage extends StatefulWidget {
+  const MyHomePage({super.key});
+
+  @override
+  State<MyHomePage> createState() => _MyHomePageState();
+}
+
+class _MyHomePageState extends State<MyHomePage> {
+  late Future<List<SpotEntry>> _spotsFuture;
+
+  @override
+  void initState() {
+    super.initState();
+    final request = context.read<CookieRequest>();
+    _spotsFuture = fetchSpot(request);
+  }
+
+  void _refreshSpots() {
+    final request = context.read<CookieRequest>();
+    setState(() {
+      _spotsFuture = fetchSpot(request);
+    });
+  }
+
   Future<List<SpotEntry>> fetchSpot(CookieRequest request) async {
-    // TODO: Replace the URL with your app's URL and don't forget to add a trailing slash (/)!
-    // To connect Android emulator with Django on localhost, use URL http://10.0.2.2/
-    // If you using chrome,  use URL http://localhost:8000
-    
     final response = await request.get("$baseUrl/json/");
-    
-    // Decode response to json format
     var data = response;
     
-    // Convert json data to NewsEntry objects
     List<SpotEntry> listSpot = [];
     for (var d in data) {
       if (d != null) {
@@ -154,7 +168,7 @@ class MyHomePage extends StatelessWidget {
 
               // ==== LIST SPOT ====
               FutureBuilder(
-                future: fetchSpot(context.watch<CookieRequest>()),
+                future: _spotsFuture,
                 builder: (context, AsyncSnapshot snapshot) {
                   if (snapshot.connectionState == ConnectionState.waiting) {
                     return const Center(child: CircularProgressIndicator());
@@ -187,6 +201,10 @@ class MyHomePage extends StatelessWidget {
                             ),
                           ),
                         );
+                      },
+
+                      onDelete: () async {
+                        _refreshSpots();
                       },
                     ),
                   );
