@@ -29,6 +29,7 @@ class _SpotFormPageState extends State<SpotFormPage> {
   String _city = "";
   String _address = "";
 
+  @override
   void initState(){
     super.initState();
     if (widget.spotToEdit != null){
@@ -60,7 +61,12 @@ class _SpotFormPageState extends State<SpotFormPage> {
   Future<void> _selectTime(BuildContext context) async {
     final TimeOfDay? picked = await showTimePicker(
       context: context,
-      initialTime: TimeOfDay.now(),
+      initialTime:  _time.isNotEmpty 
+          ? TimeOfDay(
+              hour: int.parse(_time.split(':')[0]),
+              minute: int.parse(_time.split(':')[1]),
+            )
+            : TimeOfDay.now(),
     );
     if (picked != null) {
       setState(() {
@@ -96,6 +102,7 @@ class _SpotFormPageState extends State<SpotFormPage> {
                   Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: TextFormField(
+                      initialValue: _name,
                       decoration: InputDecoration(
                         hintText: "Name",
                         labelText: "Nama Spot",
@@ -121,6 +128,7 @@ class _SpotFormPageState extends State<SpotFormPage> {
                   Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: TextFormField(
+                      initialValue: _home_team,
                       decoration: InputDecoration(
                         hintText: "Home team",
                         labelText: "Home team",
@@ -146,6 +154,7 @@ class _SpotFormPageState extends State<SpotFormPage> {
                   Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: TextFormField(
+                      initialValue: _away_team,
                       decoration: InputDecoration(
                         hintText: "Away team",
                         labelText: "Away team",
@@ -171,6 +180,7 @@ class _SpotFormPageState extends State<SpotFormPage> {
                   Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: TextFormField(
+                      initialValue: _thumbnail,
                       decoration: InputDecoration(
                         hintText: "URL Thumbnail (opsional)",
                         labelText: "URL Thumbnail",
@@ -207,6 +217,7 @@ class _SpotFormPageState extends State<SpotFormPage> {
                   Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: TextFormField(
+                      initialValue: _city,
                       decoration: InputDecoration(
                         hintText: "City",
                         labelText: "City",
@@ -287,6 +298,7 @@ class _SpotFormPageState extends State<SpotFormPage> {
                   Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: TextFormField(
+                      initialValue: _address,
                       maxLines: 5,
                       decoration: InputDecoration(
                         hintText: "Address",
@@ -325,13 +337,12 @@ class _SpotFormPageState extends State<SpotFormPage> {
                               // To connect Android emulator with Django on localhost, use URL http://10.0.2.2/
                               // If you using chrome,  use URL http://localhost:8000
 
-                              print("Is logged in: ${request.loggedIn}");
-                              print("Cookies: ${request.cookies}");
-
                               String formattedDate = "${_date.year.toString().padLeft(4, '0')}-${_date.month.toString().padLeft(2, '0')}-${_date.day.toString().padLeft(2, '0')}";
 
+                              final endpoint = isEditMode ?  "$baseUrl/edit-spot-flutter/${widget.spotToEdit!.id}/" : "$baseUrl/create-spot-flutter/";
+
                               final response = await request.postJson(
-                                "$baseUrl/create-spot-flutter/",
+                                endpoint,
                                 jsonEncode({
                                   "name": _name,
                                   "home_team": _home_team,
@@ -344,7 +355,7 @@ class _SpotFormPageState extends State<SpotFormPage> {
                                   "username": request.jsonData['username'],
                                 }),
                               );
-                              print("Response: $response");
+
                               if (context.mounted) {
                                 if (response['status'] == 'success') {
                                   ScaffoldMessenger.of(context)

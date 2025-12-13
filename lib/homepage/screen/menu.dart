@@ -194,15 +194,7 @@ class _MyHomePageState extends State<MyHomePage> {
                     itemBuilder: (_, index) => SpotEntryCard(
                       spot: snapshot.data[index],
                       onTap: () {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(
-                            content: Text(
-                              "You clicked on ${snapshot.data![index].name}",
-                            ),
-                          ),
-                        );
                       },
-
                       onDelete: () async {
                         _refreshSpots();
                       },
