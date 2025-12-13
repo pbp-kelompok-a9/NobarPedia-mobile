@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:nobarpedia_mobile/homepage/screen/spot_form.dart';
 import '../models/spot_entry.dart';
 import 'package:nobarpedia_mobile/config.dart';
 import 'package:pbp_django_auth/pbp_django_auth.dart';
@@ -86,6 +87,10 @@ class SpotEntryCard extends StatelessWidget {
         );
       }
     }
+  }
+
+  void _editSpot(BuildContext context){
+    Navigator.push(context, MaterialPageRoute(builder: (context) => SpotFormPage(spotToEdit: spot,)));
   }
 
 
@@ -219,9 +224,8 @@ class SpotEntryCard extends StatelessWidget {
                     if (isOwner) ...[
                       const SizedBox(width: 16),
                       IconButton(
-                        onPressed: () {
-                          // Aksi edit
-                        },
+                        // Aksi edit
+                        onPressed: () => _editSpot(context),
                         icon: const Icon(Icons.edit, color: Colors.green, size: 26),
                       ),
 

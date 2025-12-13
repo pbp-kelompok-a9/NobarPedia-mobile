@@ -5,9 +5,11 @@ import '../screen/menu.dart';
 import 'package:flutter/material.dart';
 import 'package:nobarpedia_mobile/config.dart';
 import 'package:nobarpedia_mobile/widgets/left_drawer.dart';
+import '../models/spot_entry.dart';
 
 class SpotFormPage extends StatefulWidget {
-    const SpotFormPage({super.key});
+    final SpotEntry? spotToEdit;
+    const SpotFormPage({super.key,this.spotToEdit});
 
     @override
     State<SpotFormPage> createState() => _SpotFormPageState();
@@ -26,6 +28,20 @@ class _SpotFormPageState extends State<SpotFormPage> {
   String _time = "";
   String _city = "";
   String _address = "";
+
+  void initState(){
+    super.initState();
+    if (widget.spotToEdit != null){
+      _name = widget.spotToEdit!.name;
+      _thumbnail = widget.spotToEdit!.thumbnail;
+      _home_team = widget.spotToEdit!.homeTeam;
+      _away_team = widget.spotToEdit!.awayTeam;
+      _date = widget.spotToEdit!.date;
+      _time = widget.spotToEdit!.time;
+      _city = widget.spotToEdit!.city;
+      _address = widget.spotToEdit!.address;
+    }
+  }
 
   Future<void> _selectDate(BuildContext context) async {
     final DateTime? picked = await showDatePicker(
@@ -55,14 +71,16 @@ class _SpotFormPageState extends State<SpotFormPage> {
     }
   }
 
+  bool get isEditMode => widget.spotToEdit != null;
+
     @override
     Widget build(BuildContext context) {
         final request = context.watch<CookieRequest>();
         return Scaffold(
           appBar: AppBar(
-            title: const Center(
+            title: Center(
               child: Text(
-                'Add Nobar Spot Form',
+                isEditMode ? 'Edit Nobar Spot' : 'Add Nobar Spot Form',
               ),
             ),
           ),
@@ -347,8 +365,8 @@ class _SpotFormPageState extends State<SpotFormPage> {
                               }
                           }
                         },
-                        child: const Text(
-                          "Save",
+                        child:  Text(
+                          isEditMode ? "Update" : "Save",
                           style: TextStyle(color: Colors.white),
                         ),
                       ),
