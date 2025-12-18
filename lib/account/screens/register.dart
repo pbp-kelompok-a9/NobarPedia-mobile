@@ -2,7 +2,7 @@ import 'dart:convert';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:nobarpedia_mobile/account/screens/login.dart';
-import 'package:nobarpedia_mobile/homepage/menu.dart';
+import 'package:nobarpedia_mobile/homepage/screen/menu.dart';
 import 'package:pbp_django_auth/pbp_django_auth.dart';
 import 'package:provider/provider.dart';
 import 'package:nobarpedia_mobile/config.dart';

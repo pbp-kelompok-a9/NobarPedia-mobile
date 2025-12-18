@@ -3,7 +3,7 @@ import 'package:nobarpedia_mobile/account/screens/admin_account_page.dart';
 import 'package:nobarpedia_mobile/account/screens/login.dart';
 import 'package:nobarpedia_mobile/account/screens/profile.dart';
 import 'package:nobarpedia_mobile/account/screens/register.dart';
-import 'package:nobarpedia_mobile/homepage/menu.dart';
+import 'package:nobarpedia_mobile/homepage/screen/menu.dart';
 import 'package:nobarpedia_mobile/join/models/nobar_spot.dart';
 import 'package:nobarpedia_mobile/join/screens/menu.dart';
 import 'package:nobarpedia_mobile/join/widgets/joinlist_form.dart';

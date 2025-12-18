@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:nobarpedia_mobile/homepage/menu.dart';
+import 'package:nobarpedia_mobile/homepage/screen/menu.dart';
 import 'package:nobarpedia_mobile/join/models/nobar_spot.dart';
 
 class MySpotsCard extends StatelessWidget {

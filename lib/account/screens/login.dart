@@ -1,7 +1,7 @@
 import 'package:flutter/gestures.dart';
 import 'package:nobarpedia_mobile/account/screens/admin_account_page.dart';
 import 'package:nobarpedia_mobile/config.dart';
-import 'package:nobarpedia_mobile/homepage/menu.dart';
+import 'package:nobarpedia_mobile/homepage/screen/menu.dart';
 import 'package:flutter/material.dart';
 import 'package:pbp_django_auth/pbp_django_auth.dart';
 import 'package:provider/provider.dart';
