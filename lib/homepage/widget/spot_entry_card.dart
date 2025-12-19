@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:nobarpedia_mobile/homepage/screen/spot_form.dart';
+import 'package:nobarpedia_mobile/homepage/screen/spot_detail.dart';
 import '../models/spot_entry.dart';
 import 'package:nobarpedia_mobile/config.dart';
 import 'package:pbp_django_auth/pbp_django_auth.dart';
@@ -205,6 +206,10 @@ class SpotEntryCard extends StatelessWidget {
                       child: ElevatedButton(
                         onPressed: () {
                           // ke page detail
+                          Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => SpotDetailPage(spot: spot)),
+                          );
                         },
                         style: ElevatedButton.styleFrom(
                           backgroundColor: Colors.green,

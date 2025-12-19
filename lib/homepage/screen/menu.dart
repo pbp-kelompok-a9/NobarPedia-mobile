@@ -16,6 +16,7 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   late Future<List<SpotEntry>> _spotsFuture;
+  bool filterMySpots = false;
 
   @override
   void initState() {
@@ -32,7 +33,8 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   Future<List<SpotEntry>> fetchSpot(CookieRequest request) async {
-    final response = await request.get("$baseUrl/json/");
+    final url = filterMySpots ? "$baseUrl/json-mine/" : "$baseUrl/json/";
+    final response = await request.get(url);
     var data = response;
     
     List<SpotEntry> listSpot = [];
@@ -142,23 +144,21 @@ class _MyHomePageState extends State<MyHomePage> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    ElevatedButton(
-                      onPressed: () {},
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.green,
-                        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-                      ),
-                      child: const Text("All Spot", style: TextStyle(color: Colors.white)),
-                    ),
+                    filterButton(text: "All Spot", selected: !filterMySpots, 
+                      onTap: (){
+                        setState(() {
+                          filterMySpots = false;
+                          _spotsFuture = fetchSpot(request);
+                        });
+                      }),
                     const SizedBox(width: 10),
-                    OutlinedButton(
-                      onPressed: () {},
-                      style: OutlinedButton.styleFrom(
-                        side: const BorderSide(color: Colors.green),
-                        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-                      ),
-                      child: const Text("Your Spot", style: TextStyle(color: Colors.white)),
-                    ),
+                    filterButton(text: "Your Spot", selected: filterMySpots, 
+                      onTap: (){
+                        setState(() {
+                          filterMySpots = true;
+                          _spotsFuture = fetchSpot(request);
+                        });
+                      }),
                   ],
                 ),
 
@@ -210,4 +210,28 @@ class _MyHomePageState extends State<MyHomePage> {
 
     );
   }
+}
+
+Widget filterButton({
+  required String text,
+  required bool selected,
+  required VoidCallback onTap,
+}) {
+  return selected
+      ? ElevatedButton(
+          onPressed: onTap,
+          style: ElevatedButton.styleFrom(
+            backgroundColor: Colors.green,
+            foregroundColor: Colors.white,
+          ),
+          child: Text(text),
+        )
+      : OutlinedButton(
+          onPressed: onTap,
+          style: OutlinedButton.styleFrom(
+            side: const BorderSide(color: Colors.green),
+            foregroundColor: Colors.white,
+          ),
+          child: Text(text),
+        );
 }
