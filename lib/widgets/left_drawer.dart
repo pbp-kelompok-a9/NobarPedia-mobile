@@ -4,40 +4,11 @@ import 'package:nobarpedia_mobile/account/screens/login.dart';
 import 'package:nobarpedia_mobile/account/screens/profile.dart';
 import 'package:nobarpedia_mobile/account/screens/register.dart';
 import 'package:nobarpedia_mobile/homepage/screen/menu.dart';
-import 'package:nobarpedia_mobile/join/models/nobar_spot.dart';
 import 'package:nobarpedia_mobile/join/screens/menu.dart';
-import 'package:nobarpedia_mobile/join/widgets/joinlist_form.dart';
-import 'dart:convert';
 import 'package:nobarpedia_mobile/config.dart';
 import 'package:pbp_django_auth/pbp_django_auth.dart';
 import 'package:provider/provider.dart';
 
-// dummy data
-final String jsonString = useProductionUrl
-    ? """                                                                                           
-{
-  "id": "cbab4863-b856-40ed-b734-21b2eed8dd27",
-  "name": "Pizza e Birra Sports Bar Cilandak Town Square",
-  "city": "Jakarta",
-  "time": "14:43",
-  "host_id": "2",
-  "host_username": "pbp",
-  "joined_count": 1
-}                                                                                                             
-"""
-    : """
-{
-  "id": "cdc29475-60cc-4fa5-9f30-440129072327",
-  "name": "boing",
-  "city": "depok",
-  "time": "17:18",
-  "host_id": "1",
-  "host_username": "pbp",
-  "joined_count": 0
-}
-""";
-
-final NobarSpot nobarSpot = NobarSpot.fromJson(json.decode(jsonString));
 
 class LeftDrawer extends StatelessWidget {
   const LeftDrawer({super.key});
@@ -85,29 +56,6 @@ class LeftDrawer extends StatelessWidget {
         Navigator.push(
           context,
           MaterialPageRoute(builder: (context) => const JoinPage(mine: true)),
-        );
-      },
-    );
-  }
-
-  Widget joinFormOption(BuildContext context) {
-    // TODO: remove when review module has been integrated
-    return ListTile(
-      leading: const Icon(Icons.add_box_outlined, color: Colors.grey),
-      title: const Text(
-        'Join form (TEMP)',
-        style: TextStyle(color: Colors.grey),
-      ),
-      onTap: () {
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => CreateJoinPage(
-              id: nobarSpot.id,
-              name: nobarSpot.name,
-              city: nobarSpot.city,
-            ),
-          ),
         );
       },
     );
@@ -290,7 +238,6 @@ class LeftDrawer extends StatelessWidget {
             homeOption(context),
             joinedSpotsOption(context),
             mySpotsOption(context),
-            joinFormOption(context),
             const SizedBox(height: 1),
             const Divider(color: Colors.grey),
             const SizedBox(height: 1),
@@ -344,7 +291,6 @@ class LeftDrawer extends StatelessWidget {
             homeOption(context),
             joinedSpotsOption(context),
             mySpotsOption(context),
-            joinFormOption(context),
             loginOption(context),
             registerOption(context),
           ],

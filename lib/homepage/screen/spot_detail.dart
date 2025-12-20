@@ -1,3 +1,5 @@
+import 'package:nobarpedia_mobile/join/widgets/joinlist_form.dart';
+
 import '../models/spot_entry.dart';
 import 'package:flutter/material.dart';
 import 'package:nobarpedia_mobile/config.dart';
@@ -214,6 +216,16 @@ class SpotDetailPage extends StatelessWidget {
             height: 48,
             child: ElevatedButton(
               onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => CreateJoinPage(
+                      id: spot.id,
+                      name: spot.name,
+                      city: spot.city,
+                    ),
+                  ),
+                );
               },
               style: ElevatedButton.styleFrom(
                 backgroundColor: Colors.green,
@@ -228,7 +240,9 @@ class SpotDetailPage extends StatelessWidget {
                   fontWeight: FontWeight.w600,
                   color: Color.fromARGB(255, 255, 255, 255),
                 ),
+                
               ),
+              
             ),
           ),
         ),
