@@ -6,6 +6,7 @@ import 'package:nobarpedia_mobile/account/screens/register.dart';
 import 'package:nobarpedia_mobile/homepage/screen/menu.dart';
 import 'package:nobarpedia_mobile/join/models/nobar_spot.dart';
 import 'package:nobarpedia_mobile/join/screens/menu.dart';
+import 'package:nobarpedia_mobile/match/screens/match_menu.dart';
 import 'package:nobarpedia_mobile/join/widgets/joinlist_form.dart';
 import 'dart:convert';
 import 'package:nobarpedia_mobile/config.dart';
@@ -63,6 +64,7 @@ class LeftDrawer extends StatelessWidget {
       },
     );
   }
+
 
   Widget joinedSpotsOption(BuildContext context) {
     return ListTile(
@@ -204,7 +206,7 @@ class LeftDrawer extends StatelessWidget {
         Navigator.pushReplacement(
           context,
           // TODO: ganti dengan page admin masing2 module yeah
-          MaterialPageRoute(builder: (context) => AdminAccountPage()),
+          MaterialPageRoute(builder: (context) => (MatchMenu())),
         );
       },
     );
@@ -290,6 +292,7 @@ class LeftDrawer extends StatelessWidget {
             homeOption(context),
             joinedSpotsOption(context),
             mySpotsOption(context),
+            matchAdminPageOption(context),
             joinFormOption(context),
             const SizedBox(height: 1),
             const Divider(color: Colors.grey),
