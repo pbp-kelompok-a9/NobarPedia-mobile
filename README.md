@@ -6,7 +6,7 @@
 ---
 
 ## ⬇️ Download
-Download aplikasi versi terbaru [disini](https://app.bitrise.io/app/3ea252d0-dbb4-4afc-827f-6eec8436263f/installable-artifacts/e1f6660537b7b6e0/public-install-page/bdc51d4307efb0dc7c69c059fab0060b).
+Download aplikasi versi terbaru [disini](https://app.bitrise.io/app/3ea252d0-dbb4-4afc-827f-6eec8436263f/installable-artifacts/eb98339408aec07b/public-install-page/99a05d5dde41393cddffc7b5c01b7f67).
 
 ---
 
