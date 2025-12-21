@@ -1,6 +1,13 @@
 # 📺 NobarPedia-Mobile 📺
 ## Proyek Akhir Semester Mata Kuliah Pemrograman Berbasis Platform 25/26
 
+[![Build Status](https://app.bitrise.io/app/3ea252d0-dbb4-4afc-827f-6eec8436263f/status.svg?token=vrZwF6Soiqv-V47o-6vO9w&branch=main)](https://app.bitrise.io/app/3ea252d0-dbb4-4afc-827f-6eec8436263f)
+
+## Download
+Download aplikasi versi terbaru: [Download APK](https://app.bitrise.io/app/3ea252d0-dbb4-4afc-827f-6eec8436263f/installable-artifacts/0ca65aeab7103551/public-install-page/9aedfac695f1fbf74842a4a7ffb42209)
+
+
+
 ---
 
 ## ❓ Apa itu NobarPedia?
