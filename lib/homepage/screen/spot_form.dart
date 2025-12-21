@@ -90,7 +90,6 @@ class _SpotFormPageState extends State<SpotFormPage> {
               ),
             ),
           ),
-          drawer: LeftDrawer(),
           body : Form(
             key: _formKey,
             child: SingleChildScrollView(

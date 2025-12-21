@@ -39,7 +39,6 @@ class _CreateJoinPageState extends State<CreateJoinPage> {
         backgroundColor: Colors.green,
         foregroundColor: Colors.white,
       ),
-      drawer: const LeftDrawer(),
       body: Form(
         key: _formKey,
         child: SingleChildScrollView(

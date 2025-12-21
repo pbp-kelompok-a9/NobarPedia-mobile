@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:nobarpedia_mobile/homepage/screen/spot_form.dart';
-import 'package:nobarpedia_mobile/homepage/screen/spot_detail.dart';
 import '../models/spot_entry.dart';
 import 'package:nobarpedia_mobile/config.dart';
 import 'package:pbp_django_auth/pbp_django_auth.dart';
@@ -105,7 +104,7 @@ class SpotEntryCard extends StatelessWidget {
                     currentUsername == spot.hostUsername;
 
     return Container(
-      margin: const EdgeInsets.symmetric(horizontal: 4, vertical: 4),
+      margin: EdgeInsets.zero,
       child: InkWell(
         onTap: onTap,
         child: Card(
@@ -115,8 +114,6 @@ class SpotEntryCard extends StatelessWidget {
           ),
           color: Colors.white,
           elevation: 2,
-          child: Padding(
-            padding: const EdgeInsets.all(16.0),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -141,113 +138,109 @@ class SpotEntryCard extends StatelessWidget {
                   ),
                   
                 ),
-                const SizedBox(height: 8),
 
-                Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(20),
-                    border: Border.all(color:Colors.green, width: 1.5),
-                  ),
-                  child: Text(
-                    "${spot.homeTeam} vs ${spot.awayTeam}",
-                    style: const TextStyle(
-                      fontSize: 10,
-                      color: Colors.green,
-                      fontWeight: FontWeight.w500,
-                    ),
-                  ),
-                ),
-
-                SizedBox(height: 6),
-
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    // === Nama tempat ===
-                    Flexible(child: Text(
-                      spot.name,
-                      style: const TextStyle(
-                        fontSize: 12.0,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.black,
-                      )
-                    )),
-
-                    // === Tanggal dan waktu ===
-                    Text(
-                      "${formatDate(spot.date)} | ${spot.time.substring(0,5)}",
-                      style: const TextStyle(
-                        fontSize: 10,
-                        fontWeight: FontWeight.normal,
-                        color:Colors.black,
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(8, 8, 8, 12),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                    Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(20),
+                        border: Border.all(color:Colors.green, width: 1.5),
                       ),
-                    )
+                      child: Text(
+                        "${spot.homeTeam} vs ${spot.awayTeam}",
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style: const TextStyle(
+                          fontSize: 10,
+                          color: Colors.green,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                    ),
 
-                    
-                  ],
-                ),
+                    SizedBox(height: 6),
 
-                // City
-                Text(
-                  spot.city,
-                  style: const TextStyle(
-                    fontSize: 14.0,
-                    fontWeight: FontWeight.normal,
-                    color: Colors.black,
-                  ),
-                ),
-                const SizedBox(height: 6),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        // === Nama tempat ===
+                        Flexible(child: Text(
+                          spot.name,
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          style: const TextStyle(
+                            fontSize: 12.0,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.black,
+                          )
+                        )),
 
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Expanded(
-                      child: ElevatedButton(
-                        onPressed: () {
-                          // ke page detail
-                          Navigator.push(
-                          context,
-                          MaterialPageRoute(builder: (context) => SpotDetailPage(spot: spot)),
-                          );
-                        },
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.green,
-                          foregroundColor: Colors.white,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(12),
+                        // === Tanggal dan waktu ===
+                        Text(
+                          "${formatDate(spot.date)} | ${spot.time.substring(0,5)}",
+                          style: const TextStyle(
+                            fontSize: 10,
+                            fontWeight: FontWeight.normal,
+                            color:Colors.black,
                           ),
-                          padding: const EdgeInsets.symmetric(vertical: 12),
-                        ),
-                        child: const Text(
-                          "Detail",
-                          style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
-                        ),
-                      ),
+                        )
+                      ],
                     ),
 
-                    if (isOwner) ...[
-                      const SizedBox(width: 16),
-                      IconButton(
-                        // Aksi edit
-                        onPressed: () => _editSpot(context),
-                        icon: const Icon(Icons.edit, color: Colors.green, size: 26),
+                    // City
+                      Text(
+                        spot.city,
+                        style: const TextStyle(
+                          fontSize: 14.0,
+                          fontWeight: FontWeight.normal,
+                          color: Colors.black,
+                        ),
                       ),
+                      const SizedBox(height: 6),
 
-                      IconButton(
-                        // Aksi delete
-                        onPressed: () => _deleteSpot(context, request),
-                        icon: const Icon(Icons.delete, color: Colors.red, size: 26),
-                      ),
-                    ],
-                    
-                  ],
-                )
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          if (isOwner) ...[
+                            const SizedBox(width: 16),
+                            IconButton(
+                              // Aksi edit
+                              onPressed: () => _editSpot(context),
+                              icon: const Icon(Icons.edit, color: Colors.green, size: 26),
+                            ),
+
+                            IconButton(
+                              // Aksi delete
+                              onPressed: () => _deleteSpot(context, request),
+                              icon: const Icon(Icons.delete, color: Colors.red, size: 26),
+                            ),
+                          ],
+                          
+                        ],
+                      )
+
+
+
+
+
+                  ],),
+                ),
+
+                
+
+               
+
+                
+
+                
 
 
               ],
             ),
-          ),
         ),
       ),
     );
