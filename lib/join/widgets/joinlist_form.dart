@@ -39,7 +39,6 @@ class _CreateJoinPageState extends State<CreateJoinPage> {
         backgroundColor: Colors.green,
         foregroundColor: Colors.white,
       ),
-      drawer: const LeftDrawer(),
       body: Form(
         key: _formKey,
         child: SingleChildScrollView(
@@ -107,45 +106,47 @@ class _CreateJoinPageState extends State<CreateJoinPage> {
                   padding: const EdgeInsets.all(8.0),
                   child: ElevatedButton(
                     style: ButtonStyle(
-                      backgroundColor: WidgetStateProperty.all(Colors.green),
+                      backgroundColor: WidgetStateProperty.all(request.loggedIn ? Colors.green : Colors.red),
                     ),
-                    onPressed: () async {
-                      if (_formKey.currentState!.validate()) {
-                        final response = await request.postJson(
-                          "$baseUrl/join/create-flutter/",
-                          jsonEncode({
-                            "nobar_place_id": widget.id,
-                            "status": _status,
-                          }),
-                        );
-                        if (context.mounted) {
-                          if (response['status'] == 'success') {
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              const SnackBar(
-                                content: Text("Successfully joined the spot!"),
-                              ),
-                            );
-                            Navigator.pushReplacement(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) =>
-                                    const JoinPage(mine: false),
-                              ),
-                            );
-                          } else {
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              const SnackBar(
-                                content: Text(
-                                  "Something went wrong, please try again.",
-                                ),
-                              ),
-                            );
+                    onPressed: request.loggedIn
+                        ? () async {
+                            if (_formKey.currentState!.validate()) {
+                              final response = await request.postJson(
+                                "$baseUrl/join/create-flutter/",
+                                jsonEncode({
+                                  "nobar_place_id": widget.id,
+                                  "status": _status,
+                                }),
+                              );
+                              if (context.mounted) {
+                                if (response['status'] == 'success') {
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    const SnackBar(
+                                      content: Text("Successfully joined the spot!"),
+                                    ),
+                                  );
+                                  Navigator.pushReplacement(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) =>
+                                          const JoinPage(mine: false),
+                                    ),
+                                  );
+                                } else {
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    const SnackBar(
+                                      content: Text(
+                                        "Something went wrong, please try again.",
+                                      ),
+                                    ),
+                                  );
+                                }
+                              }
+                            }
                           }
-                        }
-                      }
-                    },
-                    child: const Text(
-                      "Join",
+                        : null,
+                    child: Text(
+                      request.loggedIn ? "Join" : "Please log in first",
                       style: TextStyle(color: Colors.white),
                     ),
                   ),

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:nobarpedia_mobile/homepage/screen/menu.dart';
 import 'package:nobarpedia_mobile/join/models/nobar_spot.dart';
 
 class MySpotsCard extends StatelessWidget {
@@ -48,36 +47,6 @@ class MySpotsCard extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 16),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-                TextButton(
-                  onPressed: () {
-                    // TODO: Redirect to homepage's edit form
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => MyHomePage(),
-                      ),
-                    );
-                  },
-                  child: const Text(
-                    'Edit',
-                    style: TextStyle(color: Colors.green),
-                  ),
-                ),
-                const SizedBox(width: 8),
-                TextButton(
-                  onPressed: () {
-                    // TODO: Call homepage's delete endpoint
-                  },
-                  child: const Text(
-                    'Delete',
-                    style: TextStyle(color: Colors.red),
-                  ),
-                ),
-              ],
-            ),
           ],
         ),
       ),

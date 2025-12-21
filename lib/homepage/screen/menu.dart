@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:nobarpedia_mobile/widgets/left_drawer.dart';
+import 'package:nobarpedia_mobile/homepage/screen/spot_detail.dart';
 import '../models/spot_entry.dart';
 import '../widget/spot_entry_card.dart';
 import 'package:pbp_django_auth/pbp_django_auth.dart';
@@ -185,8 +186,8 @@ class _MyHomePageState extends State<MyHomePage> {
                     physics: NeverScrollableScrollPhysics(),
                     gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
                       maxCrossAxisExtent: 350, 
-                      mainAxisSpacing: 8,
-                      crossAxisSpacing: 8,
+                      mainAxisSpacing: 4,
+                      crossAxisSpacing: 2,
                       childAspectRatio: 0.75, 
                     ),
 
@@ -194,6 +195,9 @@ class _MyHomePageState extends State<MyHomePage> {
                     itemBuilder: (_, index) => SpotEntryCard(
                       spot: snapshot.data[index],
                       onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => SpotDetailPage(spot: snapshot.data[index])));
                       },
                       onDelete: () async {
                         _refreshSpots();
