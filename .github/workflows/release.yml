@@ -46,7 +46,8 @@ jobs:
           alias: release  # Ensure this matches your keystore alias (you used 'release' in your old script)
           keyStorePassword: ${{ secrets.KEY_PASSWORD }}
           keyPassword: ${{ secrets.KEY_PASSWORD }}
-          buildToolsVersion: 34.0.0
+        env:
+          BUILD_TOOLS_VERSION: "34.0.0"
 
       # FIX: Updated deprecated ::set-output syntax to $GITHUB_OUTPUT
       - name: Get version from pubspec.yaml
