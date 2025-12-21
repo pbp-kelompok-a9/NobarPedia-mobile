@@ -289,8 +289,6 @@ class LeftDrawer extends StatelessWidget {
           ] else ...[
             // Kalo user BELUM login
             homeOption(context),
-            joinedSpotsOption(context),
-            mySpotsOption(context),
             loginOption(context),
             registerOption(context),
           ],
