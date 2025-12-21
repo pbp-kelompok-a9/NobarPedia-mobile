@@ -5,12 +5,9 @@ import 'package:nobarpedia_mobile/account/screens/profile.dart';
 import 'package:nobarpedia_mobile/account/screens/register.dart';
 import 'package:nobarpedia_mobile/homepage/screen/menu.dart';
 import 'package:nobarpedia_mobile/join/screens/menu.dart';
-<<<<<<< HEAD
 import 'package:nobarpedia_mobile/match/screens/match_menu.dart';
 import 'package:nobarpedia_mobile/join/widgets/joinlist_form.dart';
 import 'dart:convert';
-=======
->>>>>>> d77bacdc6fb6d06c619d2d507d5d447df6c8412a
 import 'package:nobarpedia_mobile/config.dart';
 import 'package:pbp_django_auth/pbp_django_auth.dart';
 import 'package:provider/provider.dart';
@@ -245,11 +242,7 @@ class LeftDrawer extends StatelessWidget {
             homeOption(context),
             joinedSpotsOption(context),
             mySpotsOption(context),
-<<<<<<< HEAD
             matchAdminPageOption(context),
-            joinFormOption(context),
-=======
->>>>>>> d77bacdc6fb6d06c619d2d507d5d447df6c8412a
             const SizedBox(height: 1),
             const Divider(color: Colors.grey),
             const SizedBox(height: 1),
