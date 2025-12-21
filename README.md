@@ -1,4 +1,4 @@
-<img width="1775" height="741" alt="image" src="https://github.com/user-attachments/assets/7cd85438-88fb-43ef-92a0-781beab4e35a" /># 📺 NobarPedia-Mobile 📺
+# 📺 NobarPedia-Mobile 📺
 ## Proyek Akhir Semester Mata Kuliah Pemrograman Berbasis Platform 25/26
 
 [![Build Status](https://app.bitrise.io/app/3ea252d0-dbb4-4afc-827f-6eec8436263f/status.svg?token=vrZwF6Soiqv-V47o-6vO9w&branch=main)](https://app.bitrise.io/app/3ea252d0-dbb4-4afc-827f-6eec8436263f)
