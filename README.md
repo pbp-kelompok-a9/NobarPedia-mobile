@@ -1,4 +1,4 @@
-# 📺 NobarPedia-Mobile 📺
+<img width="1775" height="741" alt="image" src="https://github.com/user-attachments/assets/7cd85438-88fb-43ef-92a0-781beab4e35a" /># 📺 NobarPedia-Mobile 📺
 ## Proyek Akhir Semester Mata Kuliah Pemrograman Berbasis Platform 25/26
 
 [![Build Status](https://app.bitrise.io/app/3ea252d0-dbb4-4afc-827f-6eec8436263f/status.svg?token=vrZwF6Soiqv-V47o-6vO9w&branch=main)](https://app.bitrise.io/app/3ea252d0-dbb4-4afc-827f-6eec8436263f)
@@ -6,7 +6,7 @@
 ---
 
 ## ⬇️ Download
-Download aplikasi versi terbaru [disini](https://app.bitrise.io/app/3ea252d0-dbb4-4afc-827f-6eec8436263f/installable-artifacts/0ca65aeab7103551/public-install-page/9aedfac695f1fbf74842a4a7ffb42209).
+Download aplikasi versi terbaru [disini](https://app.bitrise.io/app/3ea252d0-dbb4-4afc-827f-6eec8436263f/installable-artifacts/e1f6660537b7b6e0/public-install-page/bdc51d4307efb0dc7c69c059fab0060b).
 
 ---
 
